@@ -11,6 +11,8 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 *.log
+.plastic/
+
 
 # /Assets/CharaAssets
 
