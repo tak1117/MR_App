@@ -13,6 +13,7 @@
 *.log
 .plastic/
 .vsconfig
+ProjectSettings
 
 
 # /Assets/CharaAssets
