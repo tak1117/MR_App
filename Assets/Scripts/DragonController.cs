@@ -3,143 +3,177 @@ using System.Collections;
 
 public class DragonController : MonoBehaviour
 {
+    [Header("攻撃用の設定")]
+    public GameObject attackHitboxPrefab; // Inspectorから当たり判定プレハブを設定
+
+    [Header("ステータス設定")]
+    public int maxHp = 100;
+    public int attackPower = 25;
+    private int currentHp;
+
     [Header("移動と回転の設定")]
-    public float moveSpeed = 2.0f;      // 移動速度
-    public float rotationSpeed = 5.0f;  // 振り向く速度
+    public float moveSpeed = 2.0f;
+    public float rotationSpeed = 5.0f;
 
-    [Header("攻撃設定")]
-    public float attackDistance = 5.0f; // この距離まで近づいたら攻撃する
+    [Header("索敵・攻撃距離設定")]
+    public float attackDistance = 5.0f;
+    public float attackCooldown = 2.0f;
+    public float attackHitDelay = 0f;
 
-    private Transform target;           // 攻撃対象のドラゴン
-    private Animator animator;          // アニメーション制御用
+    private Transform target;
+    private Animator animator;
+    private float lastAttackTime;
 
     // ドラゴンの状態を定義
     private enum DragonState
     {
-        Idle,       // 待機
         Searching,  // 索敵中
-        Moving,     // 移動中
+        Chasing,    // 追跡中 (移動)
         Attacking   // 攻撃中
     }
-    private DragonState currentState; // 現在の状態
+    private DragonState currentState;
 
     void Start()
     {
-        // 自身のAnimatorコンポーネントを取得
         animator = GetComponent<Animator>();
-        // 初期状態は索敵から
+        currentHp = maxHp; // HPを最大値で初期化
         currentState = DragonState.Searching;
+        lastAttackTime = -attackCooldown; // 最初から攻撃できるようにする
     }
 
     void Update()
     {
-        FindOpponent();
-        // 状態に応じて処理を切り替え
+        // ターゲットがいなければ探す
+        if (target == null)
+        {
+            currentState = DragonState.Searching;
+        }
+
         switch (currentState)
         {
-            case DragonState.Idle:
-                // 何もしない（または待機アニメーション）
-                break;
-            /*
             case DragonState.Searching:
+                animator.SetBool("IsMoving", false);
                 FindOpponent();
                 break;
-            */
-            case DragonState.Moving:
-                MoveTowardsTarget();
+
+            case DragonState.Chasing:
+                HandleChasing();
                 break;
+
             case DragonState.Attacking:
-                AttackTarget();
+                HandleAttacking();
                 break;
         }
     }
 
-    // 敵を探す処理
     void FindOpponent()
     {
-        // "Dragon"タグが付いている全てのゲームオブジェクトを検索
         GameObject[] dragons = GameObject.FindGameObjectsWithTag("Dragon");
-
         foreach (GameObject dragon in dragons)
         {
-            // 見つかったドラゴンが自分自身でなければ、それをターゲットに設定
             if (dragon != this.gameObject)
             {
                 target = dragon.transform;
-                // ターゲットを見つけたら、移動状態に遷移
-                currentState = DragonState.Moving;
-                Debug.Log(this.name + "がターゲット(" + target.name + ")を発見！");
-                return; // ターゲットが見つかったらループを抜ける
+                currentState = DragonState.Chasing; // 追跡状態に移行
+                return;
             }
         }
     }
 
-    // ターゲットに向かって移動する処理
-    void MoveTowardsTarget()
+    void HandleChasing()
     {
-        if (target == null)
-        {
-            // ターゲットを失ったら索敵状態に戻る
-            currentState = DragonState.Searching;
-            animator.SetBool("IsMoving", false); // 移動アニメーションを停止
-            return;
-        }
+        if (target == null) return;
 
-        // ターゲットとの距離を計算
         float distance = Vector3.Distance(transform.position, target.position);
 
+        // 攻撃範囲に入ったら攻撃状態へ
         if (distance <= attackDistance)
         {
-            // 攻撃範囲内に入ったら、攻撃状態に遷移
             currentState = DragonState.Attacking;
-            animator.SetBool("IsMoving", false); // 移動アニメーションを停止
         }
-        else
+        else // 範囲外なら追跡を続ける
         {
-            // ターゲットの方向を向く
+            animator.SetBool("IsMoving", true);
             Vector3 direction = (target.position - transform.position).normalized;
-            // Y軸の回転のみに限定して、急な傾きを防ぐ
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
-
-            // ターゲットに向かって前進
             transform.position += transform.forward * moveSpeed * Time.deltaTime;
-
-            // 移動アニメーションを再生
-            animator.SetBool("IsMoving", true);
         }
     }
 
-    // 攻撃処理
-    void AttackTarget()
+    void HandleAttacking()
     {
-        if (target == null)
+        if (target == null) return;
+        
+        // 攻撃のクールダウンが終わっているかチェック
+        if (Time.time > lastAttackTime + attackCooldown)
         {
-             // 攻撃中にターゲットを失ったら索敵状態に戻る
-            currentState = DragonState.Moving;
-            return;
+            StartCoroutine(AttackCoroutine());
+            currentState = DragonState.Chasing;
         }
         
-        // 念のため、ターゲットの方向を向く
+        // 攻撃後、相手が範囲外に出たら追跡に戻る
+        float distance = Vector3.Distance(transform.position, target.position);
+        if (distance > attackDistance)
+        {
+            currentState = DragonState.Chasing;
+        }
+    }
+
+    private IEnumerator AttackCoroutine()
+    {
+        // 攻撃状態の初期設定
+        animator.SetBool("IsMoving", false);
         Vector3 direction = (target.position - transform.position).normalized;
-        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-        transform.rotation = lookRotation;
+        transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+        lastAttackTime = Time.time;
 
         // 攻撃アニメーションを再生
         animator.SetTrigger("Attack");
+        Debug.Log("Attack Animation Played !");
 
-        // 攻撃後、少し待ってから再度距離をチェックして移動状態に戻る
-        // ここでは、一度攻撃したら再度距離をチェックするためにMoving状態に戻す
-        // 連続攻撃したい場合は、このロジックを調整する
-        StartCoroutine(AttackCooldown());
+        yield return new WaitForSeconds(attackHitDelay);
+        // 待った後に当たり判定を生成する
+        LaunchAttack();
+    }
+    /// <summary>
+    /// ダメージを受ける処理
+    /// </summary>
+    public void TakeDamage(int damage)
+    {
+        if (currentHp <= 0) return;
+
+        currentHp -= damage;
+        Debug.Log(gameObject.name + " が " + damage + " ダメージを受けた！ 残りHP: " + currentHp);
+
+        if (currentHp <= 0)
+        {
+            Die();
+        }
     }
 
-    // 攻撃後のクールダウン
-    IEnumerator AttackCooldown()
+    private void Die()
     {
-        // 攻撃アニメーションの長さに合わせて待つ（例：2秒）
-        yield return new WaitForSeconds(2.0f);
-        // 状態を移動に戻して、再度距離を判定させる
-        currentState = DragonState.Moving;
+        Debug.Log(gameObject.name + " は倒れた...");
+        Destroy(gameObject, 2.0f);
+    }
+
+    public void LaunchAttack()
+    {
+        if (target == null || attackHitboxPrefab == null) return;
+
+        // プレハブを「敵の位置」に生成する
+        GameObject hitboxObject = Instantiate(attackHitboxPrefab, target.position, target.rotation);
+        Debug.Log("Hit box appeared !");
+
+        // 生成した当たり判定に攻撃力を設定する
+        HitBoxController hitbox = hitboxObject.GetComponent<HitBoxController>();
+        if (hitbox != null)
+        {
+            hitbox.attackPower = this.attackPower;
+        }
+
+        // 当たり判定が誰にも当たらなかった場合、0.5秒後に自動で消滅させる
+        Destroy(hitboxObject, 0.5f);
     }
 }
