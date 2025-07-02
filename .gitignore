@@ -12,6 +12,7 @@
 /[Uu]ser[Ss]ettings/
 *.log
 .plastic/
+.vsconfig
 
 
 # /Assets/CharaAssets
