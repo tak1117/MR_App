@@ -14,6 +14,7 @@ public class HitBoxController : MonoBehaviour
         {
             // ダメージを与える
             target.TakeDamage(attackPower);
+            Debug.Log("Take Damage !");
 
             // 役目を終えたので、この当たり判定オブジェクト自体を消滅させる
             // これにより、1ヒットで必ず消えるので多段ヒットを防げる

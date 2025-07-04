@@ -18,7 +18,6 @@ public class DragonController : MonoBehaviour
     [Header("索敵・攻撃距離設定")]
     public float attackDistance = 5.0f;
     public float attackCooldown = 2.0f;
-    public float attackHitDelay = 0f;
 
     private Transform target;
     private Animator animator;
@@ -108,7 +107,9 @@ public class DragonController : MonoBehaviour
         // 攻撃のクールダウンが終わっているかチェック
         if (Time.time > lastAttackTime + attackCooldown)
         {
-            StartCoroutine(AttackCoroutine());
+            // ▼▼▼ 修正点 2 ▼▼▼
+            // StartCoroutine呼び出しを通常のメソッド呼び出しに変更
+            PerformAttack();
             currentState = DragonState.Chasing;
         }
         
@@ -120,7 +121,9 @@ public class DragonController : MonoBehaviour
         }
     }
 
-    private IEnumerator AttackCoroutine()
+    // ▼▼▼ 修正点 1 ▼▼▼
+    // IEnumerator から void に変更し、メソッド名も分かりやすく変更
+    private void PerformAttack()
     {
         // 攻撃状態の初期設定
         animator.SetBool("IsMoving", false);
@@ -128,14 +131,19 @@ public class DragonController : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
         lastAttackTime = Time.time;
 
-        // 攻撃アニメーションを再生
+        // 攻撃アニメーションを再生するトリガーをセットするだけ
         animator.SetTrigger("Attack");
-        Debug.Log("Attack Animation Played !");
-
-        yield return new WaitForSeconds(attackHitDelay);
-        // 待った後に当たり判定を生成する
+    }
+    
+    /// <summary>
+    /// アニメーションイベントから呼び出すための公開メソッド
+    /// 攻撃判定をこの中で行う
+    /// </summary>
+    public void OnAttackAnimationStart()
+    {
         LaunchAttack();
     }
+
     /// <summary>
     /// ダメージを受ける処理
     /// </summary>
