@@ -4,7 +4,7 @@ using System.Collections;
 public class DragonController : MonoBehaviour
 {
     [Header("攻撃用の設定")]
-    public GameObject attackHitboxPrefab; // Inspectorから当たり判定プレハブを設定
+    public GameObject attackHitboxPrefab;
 
     [Header("ステータス設定")]
     public int maxHp = 100;
@@ -22,27 +22,29 @@ public class DragonController : MonoBehaviour
     private Transform target;
     private Animator animator;
     private float lastAttackTime;
+    private bool isDead = false; // 死亡状態を管理するフラグ
 
-    // ドラゴンの状態を定義
     private enum DragonState
     {
-        Searching,  // 索敵中
-        Chasing,    // 追跡中 (移動)
-        Attacking   // 攻撃中
+        Searching,
+        Chasing,
+        Attacking
     }
     private DragonState currentState;
 
     void Start()
     {
         animator = GetComponent<Animator>();
-        currentHp = maxHp; // HPを最大値で初期化
+        currentHp = maxHp;
         currentState = DragonState.Searching;
-        lastAttackTime = -attackCooldown; // 最初から攻撃できるようにする
+        lastAttackTime = -attackCooldown;
     }
 
     void Update()
     {
-        // ターゲットがいなければ探す
+        // 死亡している場合は、以降の処理をすべて中断する
+        if (isDead) return;
+
         if (target == null)
         {
             currentState = DragonState.Searching;
@@ -54,11 +56,9 @@ public class DragonController : MonoBehaviour
                 animator.SetBool("IsMoving", false);
                 FindOpponent();
                 break;
-
             case DragonState.Chasing:
                 HandleChasing();
                 break;
-
             case DragonState.Attacking:
                 HandleAttacking();
                 break;
@@ -73,7 +73,7 @@ public class DragonController : MonoBehaviour
             if (dragon != this.gameObject)
             {
                 target = dragon.transform;
-                currentState = DragonState.Chasing; // 追跡状態に移行
+                currentState = DragonState.Chasing;
                 return;
             }
         }
@@ -85,12 +85,11 @@ public class DragonController : MonoBehaviour
 
         float distance = Vector3.Distance(transform.position, target.position);
 
-        // 攻撃範囲に入ったら攻撃状態へ
         if (distance <= attackDistance)
         {
             currentState = DragonState.Attacking;
         }
-        else // 範囲外なら追跡を続ける
+        else
         {
             animator.SetBool("IsMoving", true);
             Vector3 direction = (target.position - transform.position).normalized;
@@ -104,16 +103,12 @@ public class DragonController : MonoBehaviour
     {
         if (target == null) return;
         
-        // 攻撃のクールダウンが終わっているかチェック
         if (Time.time > lastAttackTime + attackCooldown)
         {
-            // ▼▼▼ 修正点 2 ▼▼▼
-            // StartCoroutine呼び出しを通常のメソッド呼び出しに変更
             PerformAttack();
             currentState = DragonState.Chasing;
         }
         
-        // 攻撃後、相手が範囲外に出たら追跡に戻る
         float distance = Vector3.Distance(transform.position, target.position);
         if (distance > attackDistance)
         {
@@ -121,35 +116,24 @@ public class DragonController : MonoBehaviour
         }
     }
 
-    // ▼▼▼ 修正点 1 ▼▼▼
-    // IEnumerator から void に変更し、メソッド名も分かりやすく変更
     private void PerformAttack()
     {
-        // 攻撃状態の初期設定
         animator.SetBool("IsMoving", false);
         Vector3 direction = (target.position - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
         lastAttackTime = Time.time;
-
-        // 攻撃アニメーションを再生するトリガーをセットするだけ
         animator.SetTrigger("Attack");
     }
     
-    /// <summary>
-    /// アニメーションイベントから呼び出すための公開メソッド
-    /// 攻撃判定をこの中で行う
-    /// </summary>
     public void OnAttackAnimationStart()
     {
         LaunchAttack();
     }
 
-    /// <summary>
-    /// ダメージを受ける処理
-    /// </summary>
     public void TakeDamage(int damage)
     {
-        if (currentHp <= 0) return;
+        // 死亡している場合はダメージを受けない
+        if (isDead) return;
 
         currentHp -= damage;
         Debug.Log(gameObject.name + " が " + damage + " ダメージを受けた！ 残りHP: " + currentHp);
@@ -162,26 +146,45 @@ public class DragonController : MonoBehaviour
 
     private void Die()
     {
+        // 既に死亡処理が始まっている場合は何もしない
+        if (isDead) return;
+        isDead = true;
+
         Debug.Log(gameObject.name + " は倒れた...");
-        Destroy(gameObject, 2.0f);
+        
+        // "Die"という名前のトリガーをAnimatorに送る
+        animator.SetTrigger("Die");
+        
+        // アニメーションの長さを取得して、その時間後にオブジェクトを破壊する
+        float dieAnimationLength = GetAnimationLength("Die");
+        Destroy(gameObject, dieAnimationLength);
+    }
+
+    // 指定された名前のアニメーションクリップの長さを取得するヘルパー関数
+    private float GetAnimationLength(string clipName)
+    {
+        // アニメーターに設定されているすべてのアニメーションクリップを調べる
+        foreach (AnimationClip clip in animator.runtimeAnimatorController.animationClips)
+        {
+            if (clip.name == clipName)
+            {
+                return clip.length;
+            }
+        }
+        // 見つからなかった場合はデフォルト値として2秒を返す
+        Debug.LogWarning("Animation clip '" + clipName + "' not found. Defaulting to 2 seconds.");
+        return 2.0f;
     }
 
     public void LaunchAttack()
     {
         if (target == null || attackHitboxPrefab == null) return;
-
-        // プレハブを「敵の位置」に生成する
         GameObject hitboxObject = Instantiate(attackHitboxPrefab, target.position, target.rotation);
-        Debug.Log("Hit box appeared !");
-
-        // 生成した当たり判定に攻撃力を設定する
         HitBoxController hitbox = hitboxObject.GetComponent<HitBoxController>();
         if (hitbox != null)
         {
             hitbox.attackPower = this.attackPower;
         }
-
-        // 当たり判定が誰にも当たらなかった場合、0.5秒後に自動で消滅させる
         Destroy(hitboxObject, 0.5f);
     }
 }
