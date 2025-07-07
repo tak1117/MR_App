@@ -18,11 +18,15 @@ public class DragonController : MonoBehaviour
     [Header("索敵・攻撃距離設定")]
     public float attackDistance = 5.0f;
     public float attackCooldown = 2.0f;
+    [Header("レーダー索敵の設定")]
+    public float detectionRange = 500f;
+    public float detectionAngle = 60f;
+    public int numberOfRays = 11;
 
     private Transform target;
     private Animator animator;
     private float lastAttackTime;
-    private bool isDead = false; // 死亡状態を管理するフラグ
+    private bool isDead = false;
 
     private enum DragonState
     {
@@ -42,7 +46,6 @@ public class DragonController : MonoBehaviour
 
     void Update()
     {
-        // 死亡している場合は、以降の処理をすべて中断する
         if (isDead) return;
 
         if (target == null)
@@ -67,14 +70,39 @@ public class DragonController : MonoBehaviour
 
     void FindOpponent()
     {
-        GameObject[] dragons = GameObject.FindGameObjectsWithTag("Dragon");
-        foreach (GameObject dragon in dragons)
+        float startAngle = -detectionAngle / 2f;
+        float angleStep = detectionAngle / (numberOfRays - 1);
+
+        Vector3 rayOrigin = transform.position;
+        rayOrigin.y += 2f; 
+
+        for (int i = 0; i < numberOfRays; i++)
         {
-            if (dragon != this.gameObject)
+            float currentAngle = startAngle + angleStep * i;
+            Quaternion rotation = Quaternion.Euler(0, currentAngle, 0);
+            Vector3 direction = rotation * transform.forward;
+            Debug.Log("索敵中");
+            RaycastHit hit;
+            
+            // ▼▼▼ ご指定のロジックに修正 ▼▼▼
+            if (Physics.Raycast(rayOrigin, direction, out hit, detectionRange))
             {
-                target = dragon.transform;
-                currentState = DragonState.Chasing;
-                return;
+                Debug.DrawRay(rayOrigin, direction * hit.distance, Color.red);
+                Debug.Log("Rayが当たったオブジェクト: " + hit.collider.gameObject.name);
+                // 当たった相手のタグが"Dragon"であり、かつ自分自身でなければ
+                if (hit.collider.CompareTag("Dragon") && hit.transform != this.transform)
+                {
+                    Debug.Log("Dragonに当たりました！");
+                    // 索敵完了の処理
+                    target = hit.transform;
+                    currentState = DragonState.Chasing;
+                    return;
+                }
+            }
+            // ▲▲▲ ご指定のロジックに修正 ▲▲▲
+            else
+            {
+                Debug.DrawRay(rayOrigin, direction * detectionRange, Color.green);
             }
         }
     }
@@ -132,7 +160,6 @@ public class DragonController : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        // 死亡している場合はダメージを受けない
         if (isDead) return;
 
         currentHp -= damage;
@@ -146,24 +173,18 @@ public class DragonController : MonoBehaviour
 
     private void Die()
     {
-        // 既に死亡処理が始まっている場合は何もしない
         if (isDead) return;
         isDead = true;
 
         Debug.Log(gameObject.name + " は倒れた...");
-        
-        // "Die"という名前のトリガーをAnimatorに送る
         animator.SetTrigger("Die");
         
-        // アニメーションの長さを取得して、その時間後にオブジェクトを破壊する
         float dieAnimationLength = GetAnimationLength("Die");
         Destroy(gameObject, dieAnimationLength);
     }
 
-    // 指定された名前のアニメーションクリップの長さを取得するヘルパー関数
     private float GetAnimationLength(string clipName)
     {
-        // アニメーターに設定されているすべてのアニメーションクリップを調べる
         foreach (AnimationClip clip in animator.runtimeAnimatorController.animationClips)
         {
             if (clip.name == clipName)
@@ -171,7 +192,6 @@ public class DragonController : MonoBehaviour
                 return clip.length;
             }
         }
-        // 見つからなかった場合はデフォルト値として2秒を返す
         Debug.LogWarning("Animation clip '" + clipName + "' not found. Defaulting to 2 seconds.");
         return 2.0f;
     }

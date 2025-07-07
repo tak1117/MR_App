@@ -704,11 +704,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 454130, guid: 59c100dd669d88f46b60555886d4dae7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 200
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 454130, guid: 59c100dd669d88f46b60555886d4dae7, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 454130, guid: 59c100dd669d88f46b60555886d4dae7, type: 3}
       propertyPath: m_LocalRotation.x
@@ -716,7 +716,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 454130, guid: 59c100dd669d88f46b60555886d4dae7, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 454130, guid: 59c100dd669d88f46b60555886d4dae7, type: 3}
       propertyPath: m_LocalRotation.z
@@ -728,7 +728,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 454130, guid: 59c100dd669d88f46b60555886d4dae7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 454130, guid: 59c100dd669d88f46b60555886d4dae7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -1166,8 +1166,11 @@ MonoBehaviour:
   attackPower: 25
   moveSpeed: 50
   rotationSpeed: 10
-  attackDistance: 230
+  attackDistance: 200
   attackCooldown: 2
+  detectionRange: 500
+  detectionAngle: 60
+  numberOfRays: 11
 --- !u!1 &583325460
 GameObject:
   m_ObjectHideFlags: 0
@@ -1552,8 +1555,11 @@ MonoBehaviour:
   attackPower: 25
   moveSpeed: 50
   rotationSpeed: 10
-  attackDistance: 230
+  attackDistance: 200
   attackCooldown: 2
+  detectionRange: 500
+  detectionAngle: 60
+  numberOfRays: 11
 --- !u!65 &1386208062
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1637,6 +1643,10 @@ PrefabInstance:
     - target: {fileID: 7442614115068646877, guid: b1ed03f54579d1f479112b694219e05f, type: 3}
       propertyPath: m_Name
       value: AttackHitBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 7442614115068646877, guid: b1ed03f54579d1f479112b694219e05f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1ed03f54579d1f479112b694219e05f, type: 3}
