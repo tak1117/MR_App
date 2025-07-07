@@ -50,6 +50,7 @@ public class DragonController : MonoBehaviour
 
         if (target == null)
         {
+            animator.SetBool("Attack", false);
             currentState = DragonState.Searching;
         }
 
@@ -81,7 +82,6 @@ public class DragonController : MonoBehaviour
             float currentAngle = startAngle + angleStep * i;
             Quaternion rotation = Quaternion.Euler(0, currentAngle, 0);
             Vector3 direction = rotation * transform.forward;
-            Debug.Log("索敵中");
             RaycastHit hit;
             
             // ▼▼▼ ご指定のロジックに修正 ▼▼▼
@@ -92,7 +92,7 @@ public class DragonController : MonoBehaviour
                 // 当たった相手のタグが"Dragon"であり、かつ自分自身でなければ
                 if (hit.collider.CompareTag("Dragon") && hit.transform != this.transform)
                 {
-                    Debug.Log("Dragonに当たりました！");
+                    Debug.Log("敵発見");
                     // 索敵完了の処理
                     target = hit.transform;
                     currentState = DragonState.Chasing;
@@ -129,13 +129,16 @@ public class DragonController : MonoBehaviour
 
     void HandleAttacking()
     {
-        if (target == null) return;
+        if (target == null)
+        {
+            return;
+        }
         
         if (Time.time > lastAttackTime + attackCooldown)
-        {
-            PerformAttack();
-            currentState = DragonState.Chasing;
-        }
+            {
+                PerformAttack();
+                currentState = DragonState.Chasing;
+            }
         
         float distance = Vector3.Distance(transform.position, target.position);
         if (distance > attackDistance)
@@ -150,7 +153,7 @@ public class DragonController : MonoBehaviour
         Vector3 direction = (target.position - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
         lastAttackTime = Time.time;
-        animator.SetTrigger("Attack");
+        animator.SetBool("Attack", true);
     }
     
     public void OnAttackAnimationStart()
@@ -200,6 +203,7 @@ public class DragonController : MonoBehaviour
     {
         if (target == null || attackHitboxPrefab == null) return;
         GameObject hitboxObject = Instantiate(attackHitboxPrefab, target.position, target.rotation);
+        Debug.Log("攻撃");
         HitBoxController hitbox = hitboxObject.GetComponent<HitBoxController>();
         if (hitbox != null)
         {
