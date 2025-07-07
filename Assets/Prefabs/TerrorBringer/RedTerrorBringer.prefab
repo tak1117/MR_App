@@ -1149,7 +1149,7 @@ MonoBehaviour:
   attackPower: 25
   moveSpeed: 50
   rotationSpeed: 10
-  attackDistance: 100
+  attackDistance: 150
   attackCooldown: 2
   detectionRange: 750
   detectionAngle: 180
