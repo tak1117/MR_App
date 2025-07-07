@@ -130,6 +130,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1508420889}
     m_Modifications:
+    - target: {fileID: 1124498088075399872, guid: 1c0d489d5dbda1e41b18d7a7782e604a, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7116624005743295604, guid: 1c0d489d5dbda1e41b18d7a7782e604a, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -181,6 +185,22 @@ PrefabInstance:
     - target: {fileID: 7116624005743674155, guid: 1c0d489d5dbda1e41b18d7a7782e604a, type: 3}
       propertyPath: attackDistance
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7490391161715962939, guid: 1c0d489d5dbda1e41b18d7a7782e604a, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7490391161715962939, guid: 1c0d489d5dbda1e41b18d7a7782e604a, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7490391161715962939, guid: 1c0d489d5dbda1e41b18d7a7782e604a, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8693082414640829606, guid: 1c0d489d5dbda1e41b18d7a7782e604a, type: 3}
+      propertyPath: m_FillAmount
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c0d489d5dbda1e41b18d7a7782e604a, type: 3}
@@ -500,6 +520,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1889163643}
     m_Modifications:
+    - target: {fileID: 1724911437533914814, guid: 3d574e0ef084f2342953a85752a6fccd, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1724911437533914814, guid: 3d574e0ef084f2342953a85752a6fccd, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1724911437533914814, guid: 3d574e0ef084f2342953a85752a6fccd, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2661683245577409096, guid: 3d574e0ef084f2342953a85752a6fccd, type: 3}
       propertyPath: m_Name
       value: GreenTerrorBringer

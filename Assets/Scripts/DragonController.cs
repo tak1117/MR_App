@@ -3,6 +3,9 @@ using System.Collections;
 
 public class DragonController : MonoBehaviour
 {
+    [Header("HPバーの設定")]
+    [SerializeField]
+    private HPBarController hpBarController;
     [Header("攻撃用の設定")]
     public GameObject attackHitboxPrefab;
 
@@ -42,6 +45,11 @@ public class DragonController : MonoBehaviour
         currentHp = maxHp;
         currentState = DragonState.Searching;
         lastAttackTime = -attackCooldown;
+
+        if (hpBarController != null)
+        {
+            hpBarController.UpdateHP(currentHp, maxHp);
+        }
     }
 
     void Update()
@@ -168,10 +176,14 @@ public class DragonController : MonoBehaviour
         currentHp -= damage;
         Debug.Log(gameObject.name + " が " + damage + " ダメージを受けた！ 残りHP: " + currentHp);
 
-        if (currentHp <= 0)
+        if (hpBarController != null)
         {
-            Die();
+            hpBarController.UpdateHP(currentHp, maxHp);
         }
+        if (currentHp <= 0)
+            {
+                Die();
+            }
     }
 
     private void Die()
