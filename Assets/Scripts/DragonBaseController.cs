@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 
-// abstract: このスクリプト自体は直接オブジェクトにアタッチできない（親専用）という意味
 public abstract class DragonBaseController : MonoBehaviour
 {
     [Header("HPバーの設定")]
@@ -11,9 +10,9 @@ public abstract class DragonBaseController : MonoBehaviour
     public GameObject attackHitboxPrefab;
 
     [Header("ステータス設定")]
-    public int maxHp = 100;
-    public int attackPower = 25;
-    protected int currentHp;
+    public float maxHp = 100;
+    public float attackPower = 25f; // ★変更点: int から float へ
+    protected float currentHp;
 
     [Header("移動と回転の設定")]
     public float moveSpeed = 2.0f;
@@ -148,11 +147,15 @@ public abstract class DragonBaseController : MonoBehaviour
         animator.SetTrigger("Attack");
     }
 
-    public void TakeDamage(int damage)
+    // ★変更点: damageの型をintからfloatへ
+    public void TakeDamage(float damage)
     {
         if (isDead) return;
+
+        // ★変更点: floatのダメージを整数に変換して減算
         currentHp -= damage;
         Debug.Log(gameObject.name + " が " + damage + " ダメージを受けた！ 残りHP: " + currentHp);
+
         if (hpBarController != null)
         {
             hpBarController.UpdateHP(currentHp, maxHp);
@@ -187,7 +190,6 @@ public abstract class DragonBaseController : MonoBehaviour
         return 2.0f;
     }
 
-    // virtual: 子クラスでこのメソッドの挙動を上書き（オーバーライド）できるようにする
     public virtual IEnumerator LaunchAttack()
     {
         if (target == null || attackHitboxPrefab == null) yield break;
@@ -201,7 +203,6 @@ public abstract class DragonBaseController : MonoBehaviour
         yield return null;
     }
 
-    // アニメーションイベントから呼ばれる関数
     public void OnAttackAnimationStart()
     {
         StartCoroutine(LaunchAttack());

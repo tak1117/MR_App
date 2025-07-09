@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting;
 
 // DragonBaseController‚ğŒp³
 public class UsurperDragonController : DragonBaseController
@@ -12,10 +13,10 @@ public class UsurperDragonController : DragonBaseController
         if (target == null || attackHitboxPrefab == null) yield break;
 
         float distance = Vector3.Distance(transform.position, target.position);
-        float startAngle = -30f;
-        float finishAngle = 30f;
+        float startAngle = 30f;
+        float finishAngle = -30f;
         float time = 0f;
-        float duration = 0.5f; // îŒ`UŒ‚‚Ì‘±ŠÔ
+        float duration = 1.666f; // îŒ`UŒ‚‚Ì‘±ŠÔ
 
         while (time < duration)
         {
@@ -35,7 +36,7 @@ public class UsurperDragonController : DragonBaseController
                 hitbox.attackPower = this.attackPower;
             }
 
-            Destroy(hitboxObject, 0.1f);
+            Destroy(hitboxObject, 0.5f);
 
             yield return null;
         }
