@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 // DragonBaseControllerを継承
 public class UsurperDragonController : DragonBaseController
 {
+    [SerializeField] private GameObject FireObject;
     // 攻撃方法(LaunchAttack)をこのドラゴン専用のものに上書き（オーバーライド）する
     public override IEnumerator LaunchAttack()
     {
@@ -16,11 +17,10 @@ public class UsurperDragonController : DragonBaseController
         float startAngle = 30f;
         float finishAngle = -30f;
         float time = 0f;
-        float duration = 1.666f; // 扇形攻撃の持続時間
+        float duration = 1.333f; // 扇形攻撃の持続時間
 
         while (time < duration)
         {
-            time += Time.deltaTime;
             float progress = time / duration;
             float currentAngle = Mathf.Lerp(startAngle, finishAngle, progress);
 
@@ -29,6 +29,7 @@ public class UsurperDragonController : DragonBaseController
             Vector3 point = transform.position + direction * distance;
 
             GameObject hitboxObject = Instantiate(attackHitboxPrefab, point, Quaternion.identity);
+            GameObject fire = Instantiate(FireObject, point, Quaternion.identity);
             HitBoxController hitbox = hitboxObject.GetComponent<HitBoxController>();
 
             if (hitbox != null)
@@ -37,8 +38,11 @@ public class UsurperDragonController : DragonBaseController
             }
 
             Destroy(hitboxObject, 0.5f);
+            Destroy(fire, 0.5f);
 
-            yield return null;
+            yield return new WaitForSeconds(0.1f);
+
+            time += 0.1f;
         }
     }
 }
