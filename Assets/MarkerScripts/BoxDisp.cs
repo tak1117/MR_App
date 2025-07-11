@@ -2,38 +2,22 @@ using UnityEngine;
 using Vuforia;
 
 /// <summary>
-/// ARマーカーを認識後、一定距離移動したらオブジェクトを非表示にするコントローラー
-/// （タイミング問題対策＋詳細デバッグ機能付き）
+/// ARマーカーを認識後、一定時間経過したらオブジェクトを非表示にするコントローラー
 /// </summary>
-/// 
-
-
 public class BoxDisp : MonoBehaviour
 {
     [Header("制御するオブジェクト")]
     [Tooltip("表示・非表示を制御したい3Dオブジェクトをここに設定します。")]
     public GameObject controlledObject;
 
-    [Header("距離のしきい値 (メートル単位)")]
-    [Tooltip("オブジェクトが非表示になる距離（例: 20cmなら0.2）")]
-    public float distanceThreshold = 0.2f;
+    [Header("オブジェクトが消えるまでの時間 (秒)")]
+    [Tooltip("オブジェクトが表示されてから、ここに設定した秒数が経過すると非表示になります。")]
+    public float timeToDisappear = 5.0f; // デフォルトは5秒
 
-    public float minDis;
-
-    private float sumDistance;
-
-    private Vector3 initialPosition;
+    // プライベート変数
     private bool isTracking = false;
     private ObserverBehaviour observerBehaviour;
-
-    // ▼▼▼【変更点】▼▼▼
-    // マーカーを検出した直後かどうかを判定するためのフラグ
-    private bool justFound = false;
-    // ▲▲▲【変更点】▲▲▲
-
-
-    private float stableTimer = 0f;
-    private float requiredStableTime = 0.5f; // 0.5秒安定してから座標取得
+    private float timer = 0f; // 経過時間をカウントするタイマー
 
     void Start()
     {
@@ -48,6 +32,7 @@ public class BoxDisp : MonoBehaviour
             Debug.LogError("ObserverBehaviourが見つかりません。ImageTargetにアタッチしてください。");
         }
 
+        // 起動時はオブジェクトを非表示にしておく
         if (controlledObject != null)
         {
             controlledObject.SetActive(false);
@@ -62,19 +47,26 @@ public class BoxDisp : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Vuforiaマーカーのトラッキング状態が変化した時に呼ばれる
+    /// </summary>
     private void OnTargetStatusChanged(ObserverBehaviour behaviour, TargetStatus newStatus)
     {
-        if (newStatus.Status == Status.TRACKED || newStatus.Status == Status.EXTENDED_TRACKED)
+        // マーカーが直接見えている安定した状態の時だけ処理する
+        if (newStatus.Status == Status.TRACKED)
         {
-            if (!isTracking) // 追跡が始まった瞬間
+            // 追跡が始まった瞬間
+            if (!isTracking)
             {
                 OnTrackingFound();
             }
             isTracking = true;
         }
+        // マーカーが見えなくなった場合
         else
         {
-            if (isTracking) // 追跡がロストした瞬間
+            // 追跡がロストした瞬間
+            if (isTracking)
             {
                 OnTrackingLost();
             }
@@ -82,64 +74,52 @@ public class BoxDisp : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// マーカーの追跡が開始された時の処理
+    /// </summary>
     private void OnTrackingFound()
     {
-        Debug.Log("マーカーの検出を検知しました。");
+        Debug.Log("マーカーを検出しました。オブジェクトを表示します。");
+
         if (controlledObject != null)
         {
+            // オブジェクトを表示する
             controlledObject.SetActive(true);
+            // タイマーをリセットしてカウント開始
+            timer = 0f;
         }
-        // ▼▼▼【変更点】▼▼▼
-        // すぐに座標を記録せず、フラグを立てるだけにする
-        justFound = true;
-        // ▲▲▲【変更点】▲▲▲
     }
 
+    /// <summary>
+    /// マーカーの追跡が失われた時の処理
+    /// </summary>
     private void OnTrackingLost()
     {
         Debug.Log("マーカーがロストしました。");
         if (controlledObject != null)
         {
+            // オブジェクトを非表示にする
             controlledObject.SetActive(false);
         }
     }
 
     void Update()
     {
-        // マーカーを追跡中でなければ何もしない
-        if (!isTracking) return;
-
-        // ▼▼▼【変更点】マーカー検出直後の最初のUpdateフレームで初期位置を確定させる ▼▼▼
-        if (justFound)
-        {
-            stableTimer += Time.deltaTime;
-
-            if (stableTimer >= requiredStableTime)
-            {
-                initialPosition = transform.position;
-                justFound = false;
-                stableTimer = 0f;
-                Debug.Log($"<color=green>【初期座標を記録】 {initialPosition.ToString("F4")}</color>");
-            }
-            return;
-        }
-        // ▲▲▲【変更点】ここまで ▲▲▲
-
+        // オブジェクトが表示されている間だけタイマーを進める
         if (controlledObject != null && controlledObject.activeSelf)
         {
-            Vector3 currentPosition = transform.position;
-            float distance = Vector3.Distance(currentPosition, initialPosition);
-            if (distance > minDis)
-            {
-                sumDistance += distance;
-            }
+            // 経過時間を加算
+            timer += Time.deltaTime;
 
-            // 【デバッグ出力】初期座標、現在座標、距離をすべて表示
-            Debug.Log($"<b>現在位置:</b> {currentPosition.ToString("F4")} | <b>初期位置:</b> {initialPosition.ToString("F4")} | <b>距離:</b> {distance.ToString("F2")} m");
+            // デバッグ用に残り時間をコンソールに出力
+            float remainingTime = timeToDisappear - timer;
+            Debug.Log($"オブジェクトが消えるまであと: {remainingTime.ToString("F1")} 秒");
 
-            if (distance > distanceThreshold)
+            // タイマーが設定時間を超えたら
+            if (timer >= timeToDisappear)
             {
-                Debug.LogWarning($"距離 ({distance}m) がしきい値 ({distanceThreshold}m) を超えました。オブジェクトを非表示にします。");
+                Debug.LogWarning($"設定時間 ({timeToDisappear}秒) が経過しました。オブジェクトを非表示にします。");
+                // オブジェクトを非表示にする
                 controlledObject.SetActive(false);
             }
         }
