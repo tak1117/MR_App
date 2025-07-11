@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QCARConfig>
   <Tracking>
-    <ImageTarget name="dragon" size="100.000000 100.000000" />
+    <ImageTarget name="albino_nightmare" size="100.000000 100.000000" />
+    <ImageTarget name="green_nightmare" size="100.000000 100.000000" />
+    <ImageTarget name="darkblue_nightmare" size="100.000000 100.000000" />
+    <ImageTarget name="blue_nightmare" size="100.000000 100.000000" />
+    <ImageTarget name="TowerMarker" size="100.000000 100.000000" />
+    <ImageTarget name="GreenDragon" size="100.000000 100.000000" />
+    <ImageTarget name="BlueDragon" size="100.000000 100.000000" />
+    <ImageTarget name="RedDragon" size="100.000000 100.000000" />
+    <ImageTarget name="PurpleDragon" size="100.000000 100.000000" />
   </Tracking>
 </QCARConfig>
