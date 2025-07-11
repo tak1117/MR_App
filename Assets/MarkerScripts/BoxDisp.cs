@@ -17,7 +17,9 @@ public class BoxDisp : MonoBehaviour
     // プライベート変数
     private bool isTracking = false;
     private ObserverBehaviour observerBehaviour;
-    private float timer = 0f; // 経過時間をカウントするタイマー
+    public float timer = 0f; // 経過時間をカウントするタイマー
+
+    private BoxDisp boxDispInstance;
 
     void Start()
     {
