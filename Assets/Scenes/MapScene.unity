@@ -441,9 +441,9 @@ GameObject:
   - component: {fileID: 234728962}
   - component: {fileID: 234728961}
   - component: {fileID: 234728960}
-  - component: {fileID: 234728963}
   - component: {fileID: 234728965}
   - component: {fileID: 234728964}
+  - component: {fileID: 234728966}
   m_Layer: 0
   m_Name: BlueMarker
   m_TagString: Untagged
@@ -521,7 +521,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 234728963}
+  mPreview: {fileID: 234728966}
 --- !u!4 &234728962
 Transform:
   m_ObjectHideFlags: 0
@@ -538,25 +538,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &234728963
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 234728958}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1778676317, guid: 1e108ae5f2133934f948edded555f03e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mObserverBehaviour: {fileID: 234728961}
-  mHiddenRoot: {fileID: 0}
-  mTargetName: Tower_Blue
-  mDatasetName: Vuforia/MR.xml
-  mCastedBehaviour: {fileID: 234728961}
-  mMeshFilter: {fileID: 0}
-  mMeshRenderer: {fileID: 0}
 --- !u!114 &234728964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -586,6 +567,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHp: 100
   currentHp: 100
+--- !u!114 &234728966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 234728958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1778676317, guid: 1e108ae5f2133934f948edded555f03e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mObserverBehaviour: {fileID: 234728961}
+  mHiddenRoot: {fileID: 0}
+  mTargetName: Tower_Blue
+  mDatasetName: Vuforia/MR.xml
+  mCastedBehaviour: {fileID: 234728961}
+  mMeshFilter: {fileID: 0}
+  mMeshRenderer: {fileID: 0}
 --- !u!1 &250960165
 GameObject:
   m_ObjectHideFlags: 0
@@ -1443,9 +1443,9 @@ GameObject:
   - component: {fileID: 1004611062}
   - component: {fileID: 1004611061}
   - component: {fileID: 1004611060}
-  - component: {fileID: 1004611065}
   - component: {fileID: 1004611064}
   - component: {fileID: 1004611066}
+  - component: {fileID: 1004611067}
   m_Layer: 0
   m_Name: RedMarker
   m_TagString: Untagged
@@ -1523,7 +1523,7 @@ MonoBehaviour:
   mMotionHint: 1
   mTrackingOptimization: 0
   mTrackingOptimizationNeedsUpgrade: 0
-  mPreview: {fileID: 1004611065}
+  mPreview: {fileID: 1004611067}
 --- !u!4 &1004611062
 Transform:
   m_ObjectHideFlags: 0
@@ -1554,7 +1554,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHp: 100
   currentHp: 100
---- !u!114 &1004611065
+--- !u!114 &1004611066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1004611058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd9a6025eda30d449ba9947b95d35fda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hpSlider: {fileID: 413560440}
+  boxDispInstance: {fileID: 0}
+  TowerDispInstance: {fileID: 1004611064}
+--- !u!114 &1004611067
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1573,21 +1588,6 @@ MonoBehaviour:
   mCastedBehaviour: {fileID: 1004611061}
   mMeshFilter: {fileID: 0}
   mMeshRenderer: {fileID: 0}
---- !u!114 &1004611066
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1004611058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd9a6025eda30d449ba9947b95d35fda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hpSlider: {fileID: 413560440}
-  boxDispInstance: {fileID: 0}
-  TowerDispInstance: {fileID: 1004611064}
 --- !u!1 &1018849814
 GameObject:
   m_ObjectHideFlags: 0
@@ -2022,6 +2022,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controlledObject: {fileID: 635629747}
   timeToDisappear: 5
+  cooldownDuration: 3
   timer: 0
 --- !u!1001 &1402047792
 PrefabInstance:
@@ -2891,6 +2892,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controlledObject: {fileID: 635629747}
   timeToDisappear: 5
+  cooldownDuration: 5
   timer: 0
 --- !u!114 &1930394176
 MonoBehaviour:
