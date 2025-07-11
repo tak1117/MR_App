@@ -13,6 +13,7 @@
 *.log
 .plastic/
 .vsconfig
+QCAR/
 
 # /Assets/CharaAssets
 
