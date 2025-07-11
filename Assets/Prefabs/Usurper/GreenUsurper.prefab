@@ -3200,7 +3200,7 @@ GameObject:
   - component: {fileID: 7338294827415866806}
   - component: {fileID: 7338294827415866811}
   m_Layer: 0
-  m_Name: Green
+  m_Name: GreenUsurper
   m_TagString: Dragon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3279,8 +3279,8 @@ MonoBehaviour:
   attackDistance: 400
   attackCooldown: 2
   detectionRange: 700
-  detectionAngle: 60
-  numberOfRays: 11
+  detectionAngle: 120
+  numberOfRays: 36
   FireObject: {fileID: 6265812425272313746, guid: 19d423ea49fdd024380c5161cf234548, type: 3}
 --- !u!1 &7338294827415998007
 GameObject:

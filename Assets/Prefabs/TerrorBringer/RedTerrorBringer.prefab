@@ -1074,7 +1074,7 @@ GameObject:
   - component: {fileID: 6498462862540667230}
   m_Layer: 0
   m_Name: RedTerrorBringer
-  m_TagString: Dragon
+  m_TagString: Red Dragon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1145,15 +1145,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpBarController: {fileID: 4328969630625456746}
   attackHitboxPrefab: {fileID: 7442614115068646877, guid: b1ed03f54579d1f479112b694219e05f, type: 3}
-  maxHp: 100
-  attackPower: 25
+  maxHp: 200
+  attackPower: 40
   moveSpeed: 50
   rotationSpeed: 10
   attackDistance: 150
   attackCooldown: 2
   detectionRange: 750
-  detectionAngle: 180
-  numberOfRays: 12
+  detectionAngle: 120
+  numberOfRays: 36
 --- !u!1 &6498462862540730626
 GameObject:
   m_ObjectHideFlags: 0

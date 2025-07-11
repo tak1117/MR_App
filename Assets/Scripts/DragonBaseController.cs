@@ -1,54 +1,53 @@
 using UnityEngine;
 using System.Collections;
+using UnityEditor.Experimental.GraphView;
 
 public abstract class DragonBaseController : MonoBehaviour
 {
-    [Header("HPƒo[‚Ìİ’è")]
+    [Header("HPãƒãƒ¼ã®è¨­å®š")]
     [SerializeField]
     private HPBarController hpBarController;
-    [Header("UŒ‚—p‚Ìİ’è")]
+    [Header("æ”»æ’ƒç”¨ã®è¨­å®š")]
     public GameObject attackHitboxPrefab;
 
-    [Header("ƒXƒe[ƒ^ƒXİ’è")]
-    public float maxHp = 100;
-    public float attackPower = 25f; // š•ÏX“_: int ‚©‚ç float ‚Ö
+    [Header("ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹è¨­å®š")]
+    public float maxHp = 100f;
+    public float attackPower = 25f;
     protected float currentHp;
 
-    [Header("ˆÚ“®‚Æ‰ñ“]‚Ìİ’è")]
+    [Header("ç§»å‹•ã¨å›è»¢ã®è¨­å®š")]
     public float moveSpeed = 2.0f;
     public float rotationSpeed = 5.0f;
 
-    [Header("õ“GEUŒ‚‹——£İ’è")]
+    [Header("ç´¢æ•µãƒ»æ”»æ’ƒè·é›¢è¨­å®š")]
     public float attackDistance = 5.0f;
     public float attackCooldown = 2.0f;
-    [Header("ƒŒ[ƒ_[õ“G‚Ìİ’è")]
+    [Header("ãƒ¬ãƒ¼ãƒ€ãƒ¼ç´¢æ•µã®è¨­å®š")]
     public float detectionRange = 500f;
     public float detectionAngle = 60f;
     public int numberOfRays = 11;
 
     protected Transform target;
+    protected Transform destination;
     protected Animator animator;
     protected float lastAttackTime;
     protected bool isDead = false;
-
-    protected enum DragonState
-    {
-        Searching,
-        Chasing,
-        Attacking
-    }
-    protected DragonState currentState;
 
     protected virtual void Start()
     {
         animator = GetComponent<Animator>();
         currentHp = maxHp;
-        currentState = DragonState.Searching;
         lastAttackTime = -attackCooldown;
 
-        if (hpBarController != null)
+        if (this.CompareTag("Red Dragon"))
         {
-            hpBarController.UpdateHP(currentHp, maxHp);
+            GameObject blueTower = GameObject.FindWithTag("Blue Tower");
+            if (blueTower != null) destination = blueTower.transform;
+        }
+        else if (this.CompareTag("Blue Dragon"))
+        {
+            GameObject redTower = GameObject.FindWithTag("Red Tower");
+            if (redTower != null) destination = redTower.transform;
         }
     }
 
@@ -56,23 +55,30 @@ public abstract class DragonBaseController : MonoBehaviour
     {
         if (isDead) return;
 
-        if (target == null)
+        FindOpponent();
+
+        if (target != null)
         {
-            currentState = DragonState.Searching;
+            float distanceToTarget = Vector3.Distance(transform.position, target.position); // â˜…åç§°å¤‰æ›´
+
+            if (distanceToTarget <= attackDistance) // â˜…åç§°å¤‰æ›´
+            {
+                HandleAttacking();
+            }
+            else
+            {
+                MoveTowards(target);
+            }
+        }
+        else
+        {
+            animator.SetBool("Attack", false);
+            MoveTowards(destination);
         }
 
-        switch (currentState)
+        if (hpBarController != null)
         {
-            case DragonState.Searching:
-                animator.SetBool("IsMoving", false);
-                FindOpponent();
-                break;
-            case DragonState.Chasing:
-                HandleChasing();
-                break;
-            case DragonState.Attacking:
-                HandleAttacking();
-                break;
+            hpBarController.UpdateHP(currentHp, maxHp);
         }
     }
 
@@ -89,14 +95,19 @@ public abstract class DragonBaseController : MonoBehaviour
             Vector3 direction = rotation * transform.forward;
             RaycastHit hit;
 
+
             if (Physics.Raycast(rayOrigin, direction, out hit, detectionRange))
             {
                 Debug.DrawRay(rayOrigin, direction * hit.distance, Color.red);
-                if (hit.collider.CompareTag("Dragon") && hit.transform != this.transform)
+                switch (this.tag)
                 {
-                    target = hit.transform;
-                    currentState = DragonState.Chasing;
-                    return;
+                    case "Red Dragon":
+                        if(hit.collider.CompareTag("Blue Dragon")) target = hit.transform;
+                        break;
+                    case "Blue Dragon":
+                        if (hit.collider.CompareTag("Red Dragon")) target = hit.transform;
+                        break;
+                        
                 }
             }
             else
@@ -106,35 +117,41 @@ public abstract class DragonBaseController : MonoBehaviour
         }
     }
 
-    protected virtual void HandleChasing()
+    protected void MoveTowards(Transform moveTarget)
     {
-        if (target == null) return;
-        float distance = Vector3.Distance(transform.position, target.position);
-        if (distance <= attackDistance)
+        if (moveTarget == null)
         {
-            currentState = DragonState.Attacking;
+            animator.SetBool("IsMoving", false);
+            return;
         }
-        else
+
+        float distance = Vector3.Distance(transform.position, moveTarget.position);
+
+        if (distance > 2.0f)
         {
             animator.SetBool("IsMoving", true);
-            Vector3 direction = (target.position - transform.position).normalized;
+            Vector3 direction = (moveTarget.position - transform.position).normalized;
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
             transform.position += transform.forward * moveSpeed * Time.deltaTime;
+        }
+        else
+        {
+            animator.SetBool("IsMoving", false);
         }
     }
 
     protected virtual void HandleAttacking()
     {
         if (target == null) return;
+
         if (Time.time > lastAttackTime + attackCooldown)
         {
             PerformAttack();
         }
-        float distance = Vector3.Distance(transform.position, target.position);
-        if (distance > attackDistance)
+        else
         {
-            currentState = DragonState.Chasing;
+            animator.SetBool("IsMoving", false);
         }
     }
 
@@ -147,15 +164,11 @@ public abstract class DragonBaseController : MonoBehaviour
         animator.SetTrigger("Attack");
     }
 
-    // š•ÏX“_: damage‚ÌŒ^‚ğint‚©‚çfloat‚Ö
     public void TakeDamage(float damage)
     {
         if (isDead) return;
-
-        // š•ÏX“_: float‚Ìƒ_ƒ[ƒW‚ğ®”‚É•ÏŠ·‚µ‚ÄŒ¸Z
         currentHp -= damage;
-        Debug.Log(gameObject.name + " ‚ª " + damage + " ƒ_ƒ[ƒW‚ğó‚¯‚½I c‚èHP: " + currentHp);
-
+        Debug.Log(gameObject.name + " ãŒ " + damage + " ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãŸï¼ æ®‹ã‚ŠHP: " + currentHp);
         if (hpBarController != null)
         {
             hpBarController.UpdateHP(currentHp, maxHp);
@@ -170,7 +183,7 @@ public abstract class DragonBaseController : MonoBehaviour
     {
         if (isDead) return;
         isDead = true;
-        Debug.Log(gameObject.name + " ‚Í“|‚ê‚½...");
+        Debug.Log(gameObject.name + " ã¯å€’ã‚ŒãŸ...");
         animator.SetTrigger("Die");
         float dieAnimationLength = GetAnimationLength("Die");
         Destroy(gameObject, dieAnimationLength);

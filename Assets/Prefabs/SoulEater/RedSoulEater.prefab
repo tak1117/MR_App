@@ -897,7 +897,7 @@ GameObject:
   - component: {fileID: 3490005296711596669}
   m_Layer: 0
   m_Name: RedSoulEater
-  m_TagString: Dragon
+  m_TagString: Red Dragon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -968,15 +968,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpBarController: {fileID: 3490005297438706501}
   attackHitboxPrefab: {fileID: 7442614115068646877, guid: b1ed03f54579d1f479112b694219e05f, type: 3}
-  maxHp: 100
-  attackPower: 25
-  moveSpeed: 50
+  maxHp: 300
+  attackPower: 10
+  moveSpeed: 40
   rotationSpeed: 10
   attackDistance: 125
   attackCooldown: 2
   detectionRange: 500
-  detectionAngle: 60
-  numberOfRays: 11
+  detectionAngle: 120
+  numberOfRays: 36
 --- !u!1 &3490005298166500857
 GameObject:
   m_ObjectHideFlags: 0

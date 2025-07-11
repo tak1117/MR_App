@@ -1926,8 +1926,8 @@ GameObject:
   - component: {fileID: 3216860354726447810}
   - component: {fileID: 3216860354726447823}
   m_Layer: 0
-  m_Name: Blue
-  m_TagString: Dragon
+  m_Name: BlueUsurper
+  m_TagString: Blue Dragon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2005,8 +2005,8 @@ MonoBehaviour:
   attackDistance: 400
   attackCooldown: 2
   detectionRange: 700
-  detectionAngle: 60
-  numberOfRays: 11
+  detectionAngle: 120
+  numberOfRays: 36
   FireObject: {fileID: 6265812425272313746, guid: 19d423ea49fdd024380c5161cf234548, type: 3}
 --- !u!1 &3216860354726540749
 GameObject:

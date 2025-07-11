@@ -864,7 +864,7 @@ GameObject:
   - component: {fileID: 8410132313242150290}
   - component: {fileID: 8410132313242150293}
   m_Layer: 0
-  m_Name: Purple
+  m_Name: PurpleUsurper
   m_TagString: Dragon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -943,8 +943,8 @@ MonoBehaviour:
   attackDistance: 400
   attackCooldown: 2
   detectionRange: 700
-  detectionAngle: 60
-  numberOfRays: 11
+  detectionAngle: 120
+  numberOfRays: 36
   FireObject: {fileID: 6265812425272313746, guid: 19d423ea49fdd024380c5161cf234548, type: 3}
 --- !u!1 &8410132313242133763
 GameObject:

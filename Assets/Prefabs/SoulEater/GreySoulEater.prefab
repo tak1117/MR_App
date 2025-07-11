@@ -1633,15 +1633,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpBarController: {fileID: 3944388437167816793}
   attackHitboxPrefab: {fileID: 7442614115068646877, guid: b1ed03f54579d1f479112b694219e05f, type: 3}
-  maxHp: 100
-  attackPower: 25
-  moveSpeed: 50
+  maxHp: 300
+  attackPower: 10
+  moveSpeed: 40
   rotationSpeed: 10
   attackDistance: 125
   attackCooldown: 2
   detectionRange: 500
-  detectionAngle: 60
-  numberOfRays: 11
+  detectionAngle: 120
+  numberOfRays: 36
 --- !u!1 &3944388436772956993
 GameObject:
   m_ObjectHideFlags: 0

@@ -82251,7 +82251,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.7
-    functionName: 
+    functionName: LaunchAttack
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -82259,13 +82259,6 @@ AnimationClip:
     messageOptions: 0
   - time: 0.7
     functionName: 
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 1.4
-    functionName: LaunchAttack
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

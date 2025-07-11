@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Dragon
+  - Blue Dragon
+  - Red Dragon
   layers:
   - Default
   - TransparentFX
