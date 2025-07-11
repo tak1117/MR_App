@@ -225,7 +225,9 @@ public abstract class DragonBaseController : MonoBehaviour
     public virtual IEnumerator LaunchAttack()
     {
         if (attackTarget == null || attackHitboxPrefab == null) yield break;
+
         GameObject hitboxObject = Instantiate(attackHitboxPrefab, attackTarget.position, target.rotation);
+
         HitBoxController hitbox = hitboxObject.GetComponent<HitBoxController>();
         if (hitbox != null)
         {
