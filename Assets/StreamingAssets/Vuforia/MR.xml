@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QCARConfig>
   <Tracking>
-    <ImageTarget name="RedDragon" size="100.000000 100.000000" />
-    <ImageTarget name="PurpleDragon" size="100.000000 100.000000" />
+    <ImageTarget name="Tower_Blue2" size="100.000000 100.000000" />
+    <ImageTarget name="Box" size="100.000000 100.000000" />
+    <ImageTarget name="TerrorBringer_Green" size="100.000000 100.000000" />
+    <ImageTarget name="TerrorBringer_Purple" size="100.000000 100.000000" />
+    <ImageTarget name="TerrorBringer_Red" size="100.000000 100.000000" />
+    <ImageTarget name="Usurper_Purple" size="100.000000 100.000000" />
+    <ImageTarget name="Usurper_Red" size="100.000000 100.000000" />
+    <ImageTarget name="Usurper_Blue" size="100.000000 100.000000" />
+    <ImageTarget name="Usurper_Green" size="100.000000 100.000000" />
+    <ImageTarget name="Nightmare_Blue" size="100.000000 100.000000" />
+    <ImageTarget name="Nightmare_Darkblue" size="100.000000 100.000000" />
+    <ImageTarget name="Nightmare_Green" size="100.000000 100.000000" />
+    <ImageTarget name="Nightmare_Albino" size="100.000000 100.000000" />
+    <ImageTarget name="Tower_Blue" size="100.000000 100.000000" />
+    <ImageTarget name="Tower_Red" size="100.000000 100.000000" />
   </Tracking>
 </QCARConfig>
