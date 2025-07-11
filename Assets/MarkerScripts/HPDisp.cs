@@ -4,9 +4,9 @@ public class HPDisp : MonoBehaviour
 {
     // HPバーのスライダー
     [SerializeField]
-    private Slider hpSlider;
+    protected Slider hpSlider;
     // メインカメラ
-    private Camera mainCamera;
+    protected Camera mainCamera;
     [SerializeField] private BoxDisp boxDispInstance;
     void Start()
     {
