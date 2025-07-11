@@ -7,6 +7,8 @@ TagManager:
   - Dragon
   - Blue Dragon
   - Red Dragon
+  - Blue Tower
+  - Red Tower
   layers:
   - Default
   - TransparentFX

@@ -29,6 +29,7 @@ public abstract class DragonBaseController : MonoBehaviour
 
     protected Transform target;
     protected Transform destination;
+    protected Transform attackTarget;
     protected Animator animator;
     protected float lastAttackTime;
     protected bool isDead = false;
@@ -63,17 +64,35 @@ public abstract class DragonBaseController : MonoBehaviour
 
             if (distanceToTarget <= attackDistance) // ★名称変更
             {
+                attackTarget = target;
                 HandleAttacking();
             }
             else
             {
+                attackTarget = null;
                 MoveTowards(target);
             }
         }
         else
         {
-            animator.SetBool("Attack", false);
-            MoveTowards(destination);
+            if(destination != null)
+            {
+                float distanceToDestination = Vector3.Distance(transform.position, destination.position);
+                if(distanceToDestination <= attackDistance)
+                {
+                    attackTarget = destination;
+                    HandleAttacking();
+                }
+                else
+                {
+                    attackTarget = null;
+                    MoveTowards(destination);
+                }
+            }
+            else
+            {
+                animator.SetBool("IsMoving", false);
+            }
         }
 
         if (hpBarController != null)
@@ -143,7 +162,7 @@ public abstract class DragonBaseController : MonoBehaviour
 
     protected virtual void HandleAttacking()
     {
-        if (target == null) return;
+        if (attackTarget == null) return;
 
         if (Time.time > lastAttackTime + attackCooldown)
         {
@@ -158,7 +177,7 @@ public abstract class DragonBaseController : MonoBehaviour
     protected virtual void PerformAttack()
     {
         animator.SetBool("IsMoving", false);
-        Vector3 direction = (target.position - transform.position).normalized;
+        Vector3 direction = (attackTarget.position - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
         lastAttackTime = Time.time;
         animator.SetTrigger("Attack");
@@ -205,8 +224,8 @@ public abstract class DragonBaseController : MonoBehaviour
 
     public virtual IEnumerator LaunchAttack()
     {
-        if (target == null || attackHitboxPrefab == null) yield break;
-        GameObject hitboxObject = Instantiate(attackHitboxPrefab, target.position, target.rotation);
+        if (attackTarget == null || attackHitboxPrefab == null) yield break;
+        GameObject hitboxObject = Instantiate(attackHitboxPrefab, attackTarget.position, target.rotation);
         HitBoxController hitbox = hitboxObject.GetComponent<HitBoxController>();
         if (hitbox != null)
         {

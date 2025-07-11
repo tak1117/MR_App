@@ -3215,7 +3215,7 @@ Transform:
   m_GameObject: {fileID: 7338294827415997243}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 15, y: 15, z: 15}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7338294827415677563}
@@ -3276,7 +3276,7 @@ MonoBehaviour:
   attackPower: 3
   moveSpeed: 30
   rotationSpeed: 5
-  attackDistance: 400
+  attackDistance: 280
   attackCooldown: 2
   detectionRange: 700
   detectionAngle: 120
