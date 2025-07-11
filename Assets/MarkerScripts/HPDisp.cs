@@ -7,8 +7,10 @@ public class HPDisp : MonoBehaviour
     private Slider hpSlider;
     // メインカメラ
     private Camera mainCamera;
+    [SerializeField] private BoxDisp boxDispInstance;
     void Start()
     {
+        boxDispInstance = GetComponent<BoxDisp>();
         // メインカメラをキャッシュしておく
         mainCamera = Camera.main;
     }
@@ -25,13 +27,13 @@ public class HPDisp : MonoBehaviour
     public void UpdateHP(float currentHp, float maxHp)
     {
         // Sliderの値を0から1の範囲で設定する
-        hpSlider.value = currentHp / maxHp;
+        hpSlider.value = 1-currentHp / maxHp;
     }
 
     void Update()
     {
-        float currentHp = BoxDisp.timer;
-        float maxHp = BoxDisp.timeToDisappear;
+        float currentHp = boxDispInstance.timer;
+        float maxHp = boxDispInstance.timeToDisappear;
         UpdateHP(currentHp, maxHp);
      }
 }

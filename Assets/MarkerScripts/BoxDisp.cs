@@ -19,7 +19,7 @@ public class BoxDisp : MonoBehaviour
     private ObserverBehaviour observerBehaviour;
     public float timer = 0f; // 経過時間をカウントするタイマー
 
-    private BoxDisp boxDispInstance;
+    
 
     void Start()
     {
