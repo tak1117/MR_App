@@ -1311,15 +1311,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2240881192534159605, guid: 973e30aed52df874a8a9b583c4cf06d6, type: 3}
       propertyPath: m_LocalScale.x
-      value: 30
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 2240881192534159605, guid: 973e30aed52df874a8a9b583c4cf06d6, type: 3}
       propertyPath: m_LocalScale.y
-      value: 30
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 2240881192534159605, guid: 973e30aed52df874a8a9b583c4cf06d6, type: 3}
       propertyPath: m_LocalScale.z
-      value: 30
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 2240881192534159605, guid: 973e30aed52df874a8a9b583c4cf06d6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1379,8 +1379,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2.2491417, z: 2}
-  m_Center: {x: 0, y: 1.3183496, z: 0}
+  m_Size: {x: 2, y: 2.7804546, z: 2.4129589}
+  m_Center: {x: 0, y: 1.0526942, z: -0.032595064}
 --- !u!1001 &1402047792
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2142,8 +2142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controlledObject: {fileID: 635629747}
-  distanceThreshold: 500
-  minDis: 3
+  timeToDisappear: 20
 --- !u!114 &1930394176
 MonoBehaviour:
   m_ObjectHideFlags: 0
