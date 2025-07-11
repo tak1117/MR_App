@@ -3,19 +3,19 @@ using Vuforia;
 
 public class MarkerSpeedTrack : MonoBehaviour
 {
-    [Header("現在の速度 (m/s)")]
-    [Tooltip("計算されたマーカーの現在の速度がここに表示されます。")]
+    [Header("Marker Speed (m/s)")]
+    [Tooltip("Displays the calculated marker speed in meters per second.")]
     public float speed = 0f;
 
-    [Header("設定")]
-    [Tooltip("速度を計算する間隔（秒）。小さいほど頻繁に更新されるが、ブレに弱くなる。")]
-    public float sampleInterval = 0.1f; // 0.1秒ごとに速度を計算
+    [Header("Settings")]
+    [Tooltip("Sampling interval for speed calculation (in seconds). Smaller values result in more frequent updates.")]
+    public float sampleInterval = 0.1f;
 
-    // --- プライベート変数 ---
+    // --- Private variables ---
     private Vector3 previousPosition;
     private ObserverBehaviour observerBehaviour;
     private bool isTracking = false;
-    private float sampleTimer = 0f; // サンプリング用のタイマー
+    private float sampleTimer = 0f; // Timer for sampling interval
 
     void Start()
     {
@@ -26,7 +26,7 @@ public class MarkerSpeedTrack : MonoBehaviour
         }
         else
         {
-            Debug.LogError("ObserverBehaviourが見つかりません。ImageTargetにアタッチしてください。");
+            Debug.LogError("ObserverBehaviour not found. Make sure this script is attached to an ImageTarget.");
         }
     }
 
@@ -44,7 +44,7 @@ public class MarkerSpeedTrack : MonoBehaviour
         {
             if (!isTracking)
             {
-                // 追跡開始時に、現在位置とタイマーをリセット
+                // When tracking starts, initialize position and timer
                 previousPosition = transform.position;
                 sampleTimer = 0f;
             }
@@ -59,25 +59,25 @@ public class MarkerSpeedTrack : MonoBehaviour
 
     void Update()
     {
-        // マーカーが追跡中でなければ何もしない
+        // Do nothing if not currently being tracked
         if (!isTracking) return;
 
-        // サンプリング用のタイマーを進める
+        // Increase the sample timer by deltaTime
         sampleTimer += Time.deltaTime;
 
-        // 設定した計算間隔（sampleInterval）を過ぎたら、速度を計算する
+        // If the sampling interval has passed, calculate speed
         if (sampleTimer >= sampleInterval)
         {
-            // 移動した距離を計算
+            // Calculate distance moved
             float distance = Vector3.Distance(transform.position, previousPosition);
 
-            // 速度を計算 (速度 = 距離 / 経過時間)
+            // Calculate speed (speed = distance / time)
             speed = distance / sampleTimer;
 
-            // コンソールに速度を出力
-            Debug.Log($"マーカーの速度: {speed.ToString("F2")} m/s");
+            // Output speed to console
+            Debug.Log($"Marker speed: {speed.ToString("F2")} m/s");
 
-            // 現在の位置とタイマーを次の計算のためにリセット
+            // Reset position and timer for next calculation
             previousPosition = transform.position;
             sampleTimer = 0f;
         }

@@ -5,28 +5,27 @@ using Vuforia;
 
 public class BoxDisplay : MonoBehaviour
 {
-    [Header("制御するオブジェクト")]
-    [Tooltip("表示・非表示を制御したい3Dオブジェクトをここに設定します。")]
+    [Header("Controlled Object")]
+    [Tooltip("Set the 3D object to show/hide when the marker is detected.")]
     public GameObject controlledObject;
 
-    [Header("表示設定")]
-    [Tooltip("オブジェクトが表示されてから、消えるまでの時間（秒）")]
+    [Header("Display Settings")]
+    [Tooltip("Time (in seconds) the object stays visible after being shown.")]
     public float timeToDisappear = 5.0f;
 
-    [Header("クールダウン設定")]
-    [Tooltip("オブジェクトが消えた後、次に表示されるまでの待ち時間（秒）")]
-    public float cooldownDuration = 3.0f; // デフォルトは3秒
+    [Header("Cooldown Settings")]
+    [Tooltip("Cooldown time (in seconds) before the object can be shown again after disappearing.")]
+    public float cooldownDuration = 3.0f; // Default is 3 seconds
 
-    // --- プライベート変数 ---
+    // --- Private variables ---
     private ObserverBehaviour observerBehaviour;
     private bool isTracking = false;
 
-    public float timer = 0f; // 表示時間をカウントするタイマー
+    public float timer = 0f; // Timer to count visible duration
 
-    // ▼▼▼【変更点】クールダウン関連の変数を追加 ▼▼▼
-    private bool isCooldown = false; // 現在クールダウン中かどうかのフラグ
-    private float cooldownTimer = 0f; // クールダウン時間をカウントするタイマー
-    // ▲▲▲【変更点】ここまで ▲▲▲
+    // Cooldown management
+    private bool isCooldown = false; // Whether currently in cooldown
+    private float cooldownTimer = 0f; // Timer to count cooldown duration
 
     void Start()
     {
@@ -38,7 +37,7 @@ public class BoxDisplay : MonoBehaviour
         }
         else
         {
-            Debug.LogError("ObserverBehaviourが見つかりません。ImageTargetにアタッチしてください。");
+            Debug.LogError("ObserverBehaviour not found. Make sure this script is attached to an ImageTarget.");
         }
 
         if (controlledObject != null)
@@ -76,30 +75,29 @@ public class BoxDisplay : MonoBehaviour
     }
 
     /// <summary>
-    /// マーカーの追跡が開始された時の処理
+    /// Called when marker tracking is first detected
     /// </summary>
     private void OnTrackingFound()
     {
-        // ▼▼▼【変更点】クールダウン中でない場合のみ表示処理を行う ▼▼▼
+        // If in cooldown, do not display the object
         if (isCooldown)
         {
-            Debug.Log($"クールダウン中です。表示できません。（残り: {(cooldownDuration - cooldownTimer).ToString("F1")}秒）");
-            return; // クールダウン中は何もしない
+            Debug.Log($"In cooldown. Cannot show object. Remaining: {(cooldownDuration - cooldownTimer).ToString("F1")} sec");
+            return;
         }
-        // ▲▲▲【変更点】ここまで ▲▲▲
 
-        Debug.Log("マーカーを検出しました。オブジェクトを表示します。");
+        Debug.Log("Marker detected. Showing object.");
 
         if (controlledObject != null)
         {
             controlledObject.SetActive(true);
-            timer = 0f; // 表示タイマーをリセット
+            timer = 0f; // Reset display timer
         }
     }
 
     private void OnTrackingLost()
     {
-        Debug.Log("マーカーがロストしました。");
+        Debug.Log("Marker lost.");
         if (controlledObject != null)
         {
             controlledObject.SetActive(false);
@@ -108,39 +106,36 @@ public class BoxDisplay : MonoBehaviour
 
     void Update()
     {
-        // オブジェクトが表示されている間、表示タイマーを進める
+        // If the object is currently visible, count the display time
         if (controlledObject != null && controlledObject.activeSelf)
         {
             timer += Time.deltaTime;
 
             float remainingTime = timeToDisappear - timer;
-            Debug.Log($"オブジェクトが消えるまであと: {remainingTime.ToString("F1")} 秒");
+            Debug.Log($"Object will hide in: {remainingTime.ToString("F1")} sec");
 
-            // 表示時間が経過したら
+            // If display duration is over, hide the object
             if (timer >= timeToDisappear)
             {
-                Debug.LogWarning($"設定時間 ({timeToDisappear}秒) が経過しました。オブジェクトを非表示にします。");
+                Debug.LogWarning($"Display duration ({timeToDisappear} sec) exceeded. Hiding object.");
                 controlledObject.SetActive(false);
 
-                // ▼▼▼【変更点】クールダウンを開始する ▼▼▼
+                // Start cooldown
                 isCooldown = true;
-                cooldownTimer = 0f; // クールダウンタイマーをリセット
-                Debug.Log($"クールダウンを開始します。({cooldownDuration}秒)");
-                // ▲▲▲【変更点】ここまで ▲▲▲
+                cooldownTimer = 0f;
+                Debug.Log($"Cooldown started ({cooldownDuration} sec).");
             }
         }
 
-        // ▼▼▼【変更点】クールダウン中の処理を追加 ▼▼▼
+        // Handle cooldown countdown
         if (isCooldown)
         {
             cooldownTimer += Time.deltaTime;
-            // クールダウン時間が経過したら
             if (cooldownTimer >= cooldownDuration)
             {
-                isCooldown = false; // クールダウンフラグを解除
-                Debug.Log("クールダウンが終了しました。再度表示可能です。");
+                isCooldown = false;
+                Debug.Log("Cooldown ended. Object can be shown again.");
             }
         }
-        // ▲▲▲【変更点】ここまで ▲▲▲
     }
 }

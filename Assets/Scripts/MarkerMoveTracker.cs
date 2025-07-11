@@ -5,14 +5,14 @@ using Vuforia;
 
 public class MarkerMoveTracker : MonoBehaviour
 {
-    [Header("総移動距離 (m)")]
-    [Tooltip("マーカーが追跡開始から移動した合計の距離が表示されます。")]
+    [Header("Total Distance Moved (m)")]
+    [Tooltip("Displays the total distance the marker has moved since tracking began.")]
     public float totalDistanceMoved = 0f;
 
-    // 1フレーム前の位置を保存するための変数
+    // Variable to store the previous frame's position
     private Vector3 previousPosition;
 
-    // Vuforiaのトラッキング状態を管理するコンポーネント
+    // Reference to Vuforia's tracking component
     private ObserverBehaviour observerBehaviour;
     private bool isTracking = false;
 
@@ -41,7 +41,7 @@ public class MarkerMoveTracker : MonoBehaviour
     {
         if (newStatus.Status == Status.TRACKED)
         {
-            // 追跡が始まった瞬間に、各種値をリセット
+            // When tracking starts, reset values
             if (!isTracking)
             {
                 totalDistanceMoved = 0f;
@@ -57,13 +57,13 @@ public class MarkerMoveTracker : MonoBehaviour
 
     void Update()
     {
-        // マーカーが追跡中でなければ何もしない
+        // Do nothing if not currently being tracked
         if (!isTracking) return;
 
-        // 1フレームの間に移動した距離を計算
+        // Calculate distance moved during this frame
         float frameDistance = Vector3.Distance(transform.position, previousPosition);
 
-        // 総移動距離に加算していく
+        // Accumulate distance only if the speed is above the threshold
         if (speedTracker.speed > minSpeed)
         {
             totalDistanceMoved += frameDistance;
@@ -71,14 +71,12 @@ public class MarkerMoveTracker : MonoBehaviour
             {
                 Tower.currentHp -= frameDistance / 20;
             }
-
         }
 
+        // Output total distance to console
+        Debug.Log($"Total distance moved: {totalDistanceMoved.ToString("F2")} m");
 
-        // コンソールに総移動距離を出力
-        Debug.Log($"総移動距離: {totalDistanceMoved.ToString("F2")} m");
-
-        // 現在の位置を「1フレーム前の位置」として更新する
+        // Update previous position for the next frame
         previousPosition = transform.position;
     }
 }
