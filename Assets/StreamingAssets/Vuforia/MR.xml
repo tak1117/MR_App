@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QCARConfig>
   <Tracking>
-    <ImageTarget name="Tower_Blue2" size="100.000000 100.000000" />
     <ImageTarget name="Box" size="100.000000 100.000000" />
     <ImageTarget name="TerrorBringer_Green" size="100.000000 100.000000" />
     <ImageTarget name="TerrorBringer_Purple" size="100.000000 100.000000" />
