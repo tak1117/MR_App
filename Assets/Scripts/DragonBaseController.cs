@@ -69,6 +69,7 @@ public abstract class DragonBaseController : MonoBehaviour
             }
             else
             {
+                animator.SetBool("Attack", false);
                 attackTarget = null;
                 MoveTowards(target);
             }
@@ -85,6 +86,7 @@ public abstract class DragonBaseController : MonoBehaviour
                 }
                 else
                 {
+                    animator.SetBool("Attack", false);
                     attackTarget = null;
                     MoveTowards(destination);
                 }
@@ -92,6 +94,7 @@ public abstract class DragonBaseController : MonoBehaviour
             else
             {
                 animator.SetBool("IsMoving", false);
+                animator.SetBool("Attack", false);
             }
         }
 
@@ -180,7 +183,7 @@ public abstract class DragonBaseController : MonoBehaviour
         Vector3 direction = (attackTarget.position - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
         lastAttackTime = Time.time;
-        animator.SetTrigger("Attack");
+        animator.SetBool("Attack", true);
     }
 
     public void TakeDamage(float damage)
@@ -224,9 +227,11 @@ public abstract class DragonBaseController : MonoBehaviour
 
     public virtual IEnumerator LaunchAttack()
     {
-        if (attackTarget == null || attackHitboxPrefab == null) yield break;
-
-        GameObject hitboxObject = Instantiate(attackHitboxPrefab, attackTarget.position, target.rotation);
+        if (attackTarget == null || attackHitboxPrefab == null)
+        {
+            yield break;
+        }
+        GameObject hitboxObject = Instantiate(attackHitboxPrefab, attackTarget.position, attackTarget.rotation);
 
         HitBoxController hitbox = hitboxObject.GetComponent<HitBoxController>();
         if (hitbox != null)
