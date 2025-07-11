@@ -2,22 +2,17 @@ using UnityEngine;
 
 public class HitBoxController : MonoBehaviour
 {
-    public int attackPower = 0; // ダメージ量は攻撃者から設定される
+    // ★変更点: int から float へ
+    public float attackPower = 0f;
 
     private void OnTriggerEnter(Collider other)
     {
-        // 接触した相手からDragonControllerを探す
-        DragonController target = other.GetComponent<DragonController>();
+        DragonBaseController target = other.GetComponent<DragonBaseController>();
 
-        // 相手がDragonControllerを持っていれば（＝ドラゴンなら）
         if (target != null)
         {
-            // ダメージを与える
             target.TakeDamage(attackPower);
-            Debug.Log("Take Damage !");
-
-            // 役目を終えたので、この当たり判定オブジェクト自体を消滅させる
-            // これにより、1ヒットで必ず消えるので多段ヒットを防げる
+            Debug.Log(other.name + " にヒット！");
             Destroy(gameObject);
         }
     }
