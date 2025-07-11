@@ -20,7 +20,7 @@ public class HPDisp : MonoBehaviour
         // HPバーが常にカメラの方向を向くようにする
         if (mainCamera != null)
         {
-            transform.rotation = mainCamera.transform.rotation;
+            hpSlider.transform.rotation = mainCamera.transform.rotation;
         }
     }
     // HPの値を更新する公のメソッド

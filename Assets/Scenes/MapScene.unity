@@ -1343,6 +1343,35 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 2.7804546, z: 2.4129589}
   m_Center: {x: 0, y: 1.0526942, z: -0.032595064}
+--- !u!114 &1352773608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635629747}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24724afda262f5a469192b5e04fde47e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hpSlider: {fileID: 110534316}
+  boxDispInstance: {fileID: 1352773609}
+--- !u!114 &1352773609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635629747}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a92da96e98d2c34cbeb1048f1e9afc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controlledObject: {fileID: 635629747}
+  timeToDisappear: 5
+  timer: 0
 --- !u!1001 &1402047792
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1935,8 +1964,8 @@ GameObject:
   - component: {fileID: 1930394172}
   - component: {fileID: 1930394171}
   - component: {fileID: 1930394175}
-  - component: {fileID: 1930394177}
   - component: {fileID: 1930394176}
+  - component: {fileID: 1930394177}
   m_Layer: 0
   m_Name: BoxMaker
   m_TagString: Untagged
