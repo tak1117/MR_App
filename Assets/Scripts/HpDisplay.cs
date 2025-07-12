@@ -3,46 +3,46 @@ using UnityEngine.UI;
 
 public class HpDisplay : MonoBehaviour
 {
-    // HPƒo[‚ÌƒXƒ‰ƒCƒ_[
+    // HPãƒãƒ¼ã®ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼
     [SerializeField]
     protected Slider hpSlider;
-    // ƒƒCƒ“ƒJƒƒ‰
+    // ãƒ¡ã‚¤ãƒ³ã‚«ãƒ¡ãƒ©
     protected Camera mainCamera;
     [SerializeField] private BoxDisplay boxDispInstance;
 
     void Start()
     {
         boxDispInstance = GetComponent<BoxDisplay>();
-        // ƒƒCƒ“ƒJƒƒ‰‚ğƒLƒƒƒbƒVƒ…‚µ‚Ä‚¨‚­
+        // ãƒ¡ã‚¤ãƒ³ã‚«ãƒ¡ãƒ©ã‚’ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã—ã¦ãŠã
         mainCamera = Camera.main;
     }
 
-    // Update‚ÌŒã‚ÉŒÄ‚Î‚ê‚éLateUpdate‚ğg‚¢AƒJƒƒ‰‚Ì“®‚«‚É’Ç]‚³‚¹‚é
+    // Updateã®å¾Œã«å‘¼ã°ã‚Œã‚‹LateUpdateã‚’ä½¿ã„ã€ã‚«ãƒ¡ãƒ©ã®å‘ãã«è¿½å¾“ã•ã›ã‚‹
     void LateUpdate()
     {
-        // š C³“_: hpSlider‚ªnull‚Å‚È‚¢‚±‚Æ‚àŠm”F‚·‚é
-        // HPƒo[‚ÆƒJƒƒ‰‚Ì—¼•û‚ª‘¶İ‚·‚é‚¾‚¯ˆ—‚·‚é
+        // è¿½è¨˜ï¼šhpSliderãŒnullã§ãªã„ã“ã¨ã‚’ç¢ºèªã™ã‚‹
+        // HPãƒãƒ¼ã¨ã‚«ãƒ¡ãƒ©ã®å‘ãã‚’åŒæœŸã•ã›ã‚‹å‡¦ç†
         if (hpSlider != null && mainCamera != null)
         {
             hpSlider.transform.rotation = mainCamera.transform.rotation;
         }
     }
 
-    // HP‚Ì’l‚ğXV‚·‚éŒö‚Ìƒƒ\ƒbƒh
+    // HPã®å€¤ã‚’æ›´æ–°ã™ã‚‹ãŸã‚ã®ãƒ¡ã‚½ãƒƒãƒ‰
     public void UpdateHP(float currentHp, float maxHp)
     {
-        // š C³“_: hpSlider‚ªnull‚Å‚È‚¢‚±‚Æ‚ğŠm”F‚·‚é
-        // HPƒo[‚ª‘¶İ‚·‚é‚¾‚¯ˆ—‚·‚é
+        // è¿½è¨˜ï¼šhpSliderãŒnullã§ãªã„ã“ã¨ã‚’ç¢ºèªã™ã‚‹
+        // HPãƒãƒ¼ãŒå­˜åœ¨ã™ã‚‹å ´åˆã«å‡¦ç†ã‚’è¡Œã†
         if (hpSlider != null)
         {
-            // Slider‚Ì’l‚ğ0‚©‚ç1‚Ì”ÍˆÍ‚Åİ’è‚·‚é
+            // Sliderã®å€¤ã‚’0ã‹ã‚‰1ã®ç¯„å›²ã§è¨­å®šã™ã‚‹
             hpSlider.value = currentHp / maxHp;
         }
     }
 
     void Update()
     {
-        // ‚±‚Ì•”•ª‚ÍAhpSlider‚Ìnullƒ`ƒFƒbƒN‚ªUpdateHP“à‚Ås‚í‚ê‚é‚½‚ßC³•s—v
+        // boxDispInstanceã®ã‚¿ã‚¤ãƒãƒ¼ã‚’HPã¨ã—ã¦æ‰±ã†
         float currentHp = boxDispInstance.timer;
         float maxHp = boxDispInstance.timeToDisappear;
         UpdateHP(currentHp, maxHp);

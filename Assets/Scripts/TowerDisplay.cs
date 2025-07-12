@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class TowerDisplay : MonoBehaviour
 {
-    [Header("HPƒo[‚Ìİ’è")]
+    [Header("HPãƒãƒ¼ã®è¨­å®š")]
     [SerializeField]
-    private HPBarController hpBarController; // ƒhƒ‰ƒSƒ“‚Ì‚à‚Ì‚Æ“¯—l‚ÉHPƒo[‚ğƒCƒ“ƒXƒyƒNƒ^‚©‚çİ’è
+    private HPBarController hpBarController; // ãƒ‰ãƒ©ã‚´ãƒ³ç­‰ã®ã‚‚ã®ã¨åŒã˜HPãƒãƒ¼ã‚’ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼ã‹ã‚‰è¨­å®š
 
-    [Header("ƒ^ƒ[‚ÌƒXƒe[ƒ^ƒX")]
-    [Tooltip("‚±‚Ìƒ^ƒ[‚Ì‰Šúƒqƒbƒgƒ|ƒCƒ“ƒgiHPj‚ğİ’è‚µ‚Ü‚·B")]
-    public float maxHp = 500f; // ƒ^ƒ[‚È‚Ì‚ÅHP‚ğ‚‚ß‚Éİ’è
+    [Header("ã‚¿ãƒ¯ãƒ¼ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹")]
+    [Tooltip("ã“ã®ã‚¿ãƒ¯ãƒ¼ã®æœ€å¤§ãƒ’ãƒƒãƒˆãƒã‚¤ãƒ³ãƒˆï¼ˆHPï¼‰ã‚’è¨­å®šã—ã¾ã™ã€‚")]
+    public float maxHp = 500f; // ã‚¿ãƒ¯ãƒ¼ãªã®ã§HPã‚’é«˜ã‚ã«è¨­å®š
     public float currentHp;
 
     void Start()

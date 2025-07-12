@@ -2,14 +2,14 @@ using UnityEngine;
 using System.Collections;
 using Unity.VisualScripting;
 
-// DragonBaseController‚ğŒp³
+// DragonBaseControllerã‚’ç¶™æ‰¿
 public class UsurperDragonController : DragonBaseController
 {
     [SerializeField] private GameObject FireObject;
-    // UŒ‚•û–@(LaunchAttack)‚ğ‚±‚Ìƒhƒ‰ƒSƒ“ê—p‚Ì‚à‚Ì‚Éã‘‚«iƒI[ƒo[ƒ‰ƒCƒhj‚·‚é
+    // æ”»æ’ƒãƒ¡ã‚½ãƒƒãƒ‰(LaunchAttack)ã‚’ã€ã“ã®ãƒ‰ãƒ©ã‚´ãƒ³ç”¨ã«ä¸Šæ›¸ãï¼ˆã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ï¼‰ã™ã‚‹
     public override IEnumerator LaunchAttack()
     {
-        Debug.Log(this.name + " ‚ª“Æ©‚ÌîŒ`UŒ‚‚ğÀsI");
+        Debug.Log(this.name + " ãŒç‹¬è‡ªã®æ‰‡å½¢æ”»æ’ƒã‚’å®Ÿè¡Œï¼");
 
         if (target == null || attackHitboxPrefab == null) yield break;
 
@@ -17,7 +17,7 @@ public class UsurperDragonController : DragonBaseController
         float startAngle = 30f;
         float finishAngle = -30f;
         float time = 0f;
-        float duration = 1.333f; // îŒ`UŒ‚‚Ì‘±ŠÔ
+        float duration = 1.333f; // æ‰‡å½¢æ”»æ’ƒã®æŒç¶šæ™‚é–“
 
         while (time < duration)
         {
