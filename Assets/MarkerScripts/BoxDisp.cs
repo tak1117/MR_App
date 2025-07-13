@@ -2,7 +2,8 @@ using UnityEngine;
 using Vuforia;
 
 /// <summary>
-/// ARマーカーを認識後、一定時間経過したらオブジェクトを非表示にするコントローラー
+/// ARマーカーを初回認識後、一定時間経過したらオブジェクトを非表示にするコントローラー。
+/// 一度出現したオブジェクトは、時間経過するまでマーカーの有無に関わらず表示され続ける。
 /// </summary>
 public class BoxDisp : MonoBehaviour
 {
@@ -11,13 +12,22 @@ public class BoxDisp : MonoBehaviour
     public GameObject controlledObject;
 
     [Header("オブジェクトが消えるまでの時間 (秒)")]
-    [Tooltip("オブジェクトが表示されてから、ここに設定した秒数が経過すると非表示になります。")]
-    public float timeToDisappear = 5.0f; // デフォルトは5秒
+    [Tooltip("オブジェクトが最初に出現してから、ここに設定した秒数が経過すると非表示になります。")]
+    public float timeToDisappear = 5.0f;
 
-    // プライベート変数
-    private bool isTracking = false;
+    // --- プライベート変数 ---
     private ObserverBehaviour observerBehaviour;
     private float timer = 0f; // 経過時間をカウントするタイマー
+
+    /// <summary>
+    /// 最初のスポーンが行われたかどうかを判定するフラグ
+    /// </summary>
+    private bool hasSpawnedOnce = false;
+
+    /// <summary>
+    /// タイマーが作動中かどうかを判定するフラグ
+    /// </summary>
+    private bool isTimerRunning = false;
 
     void Start()
     {
@@ -55,22 +65,7 @@ public class BoxDisp : MonoBehaviour
         // マーカーが直接見えている安定した状態の時だけ処理する
         if (newStatus.Status == Status.TRACKED)
         {
-            // 追跡が始まった瞬間
-            if (!isTracking)
-            {
-                OnTrackingFound();
-            }
-            isTracking = true;
-        }
-        // マーカーが見えなくなった場合
-        else
-        {
-            // 追跡がロストした瞬間
-            if (isTracking)
-            {
-                OnTrackingLost();
-            }
-            isTracking = false;
+            OnTrackingFound();
         }
     }
 
@@ -79,48 +74,49 @@ public class BoxDisp : MonoBehaviour
     /// </summary>
     private void OnTrackingFound()
     {
-        Debug.Log("マーカーを検出しました。オブジェクトを表示します。");
+        if (controlledObject == null) return;
 
-        if (controlledObject != null)
+        // オブジェクトの位置と回転をマーカーに合わせる
+        controlledObject.transform.position = this.transform.position;
+        controlledObject.transform.rotation = this.transform.rotation;
+
+        // オブジェクトを表示状態にする
+        controlledObject.SetActive(true);
+
+        // まだ一度もスポーンしていなければ、タイマーを開始する
+        if (!hasSpawnedOnce)
         {
-            // オブジェクトを表示する
-            controlledObject.SetActive(true);
-            // タイマーをリセットしてカウント開始
-            timer = 0f;
+            Debug.Log("初回マーカー検出。タイマースタート！");
+            hasSpawnedOnce = true;
+            isTimerRunning = true;
+            timer = 0f; // タイマーをリセットしてスタート
         }
-    }
-
-    /// <summary>
-    /// マーカーの追跡が失われた時の処理
-    /// </summary>
-    private void OnTrackingLost()
-    {
-        Debug.Log("マーカーがロストしました。");
-        if (controlledObject != null)
+        else
         {
-            // オブジェクトを非表示にする
-            controlledObject.SetActive(false);
+            Debug.Log("マーカーを再検出。オブジェクトの位置を更新しました。");
         }
     }
 
     void Update()
     {
-        // オブジェクトが表示されている間だけタイマーを進める
-        if (controlledObject != null && controlledObject.activeSelf)
+        // タイマーが作動中の場合のみ時間を加算する
+        if (isTimerRunning)
         {
-            // 経過時間を加算
             timer += Time.deltaTime;
-
-            // デバッグ用に残り時間をコンソールに出力
-            float remainingTime = timeToDisappear - timer;
-            Debug.Log($"オブジェクトが消えるまであと: {remainingTime.ToString("F1")} 秒");
 
             // タイマーが設定時間を超えたら
             if (timer >= timeToDisappear)
             {
                 Debug.LogWarning($"設定時間 ({timeToDisappear}秒) が経過しました。オブジェクトを非表示にします。");
-                // オブジェクトを非表示にする
-                controlledObject.SetActive(false);
+
+                if (controlledObject != null)
+                {
+                    // オブジェクトを非表示にする
+                    controlledObject.SetActive(false);
+                }
+
+                // タイマーを停止する
+                isTimerRunning = false;
             }
         }
     }

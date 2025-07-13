@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - Dragon
+  - Blue Dragon
+  - Red Dragon
+  - Blue Tower
+  - Red Tower
+  - Box
   layers:
   - Default
   - TransparentFX

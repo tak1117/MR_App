@@ -339,7 +339,7 @@ GameObject:
   - component: {fileID: 5289261115888769907}
   m_Layer: 0
   m_Name: BlueSoulEater
-  m_TagString: Dragon
+  m_TagString: Blue Dragon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -353,7 +353,7 @@ Transform:
   m_GameObject: {fileID: 5289261116912080315}
   m_LocalRotation: {x: 0, y: 0.92387956, z: 0, w: 0.38268343}
   m_LocalPosition: {x: -100, y: 0, z: 100}
-  m_LocalScale: {x: 15, y: 15, z: 15}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5289261116911914105}
@@ -410,15 +410,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpBarController: {fileID: 5289261117132647655}
   attackHitboxPrefab: {fileID: 7442614115068646877, guid: b1ed03f54579d1f479112b694219e05f, type: 3}
-  maxHp: 100
-  attackPower: 25
-  moveSpeed: 50
+  maxHp: 300
+  attackPower: 10
+  moveSpeed: 40
   rotationSpeed: 10
-  attackDistance: 125
+  attackDistance: 90
   attackCooldown: 2
   detectionRange: 500
-  detectionAngle: 60
-  numberOfRays: 11
+  detectionAngle: 120
+  numberOfRays: 36
 --- !u!1 &5289261116912082361
 GameObject:
   m_ObjectHideFlags: 0
