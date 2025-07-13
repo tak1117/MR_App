@@ -30,6 +30,7 @@ public class HPBarController : MonoBehaviour
     public void UpdateHP(float currentHp, float maxHp)
     {
         // Sliderの値を0から1の範囲で設定する
-        hpSlider.value = currentHp / maxHp;
+        if (currentHp == maxHp) hpSlider.value = 1;
+        else hpSlider.value = currentHp / maxHp;
     }
 }

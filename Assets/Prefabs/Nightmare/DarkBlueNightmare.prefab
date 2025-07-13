@@ -407,7 +407,7 @@ Transform:
   m_GameObject: {fileID: 8284407432553759424}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -100, y: 0, z: 0}
-  m_LocalScale: {x: 15, y: 15, z: 15}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8284407432553970942}
@@ -464,15 +464,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpBarController: {fileID: 8284407432326387743}
   attackHitboxPrefab: {fileID: 7442614115068646877, guid: b1ed03f54579d1f479112b694219e05f, type: 3}
-  maxHp: 80
-  attackPower: 30
-  moveSpeed: 50
+  maxHp: 100
+  attackPower: 40
+  moveSpeed: 150
   rotationSpeed: 10
-  attackDistance: 200
+  attackDistance: 150
   attackCooldown: 2
   detectionRange: 800
-  detectionAngle: 180
-  numberOfRays: 12
+  detectionAngle: 120
+  numberOfRays: 36
 --- !u!1 &8284407432553760562
 GameObject:
   m_ObjectHideFlags: 0
