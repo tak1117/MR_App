@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MR App with Stock Area</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>MR App</h1>
+
+    <div id="stock-selector">
+        <strong>追加先を選択:</strong>
+        <label>
+            <input type="radio" name="player-stock" value="p1" checked> Player 1
+        </label>
+        <label>
+            <input type="radio" name="player-stock" value="p2"> Player 2
+        </label>
+    </div>
+
+    <input type="file" id="imageUploader" accept="image/*" multiple>
+
+    <div id="main-container">
+        <div id="left-stock" class="stock-area">
+            <h2>Player 1</h2>
+        </div>
+        <div id="canvas"></div>
+        <div id="right-stock" class="stock-area">
+            <h2>Player 2</h2>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

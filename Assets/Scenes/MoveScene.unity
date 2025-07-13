@@ -539,7 +539,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7116624005743295604, guid: 1c0d489d5dbda1e41b18d7a7782e604a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 197
+      value: -54
       objectReference: {fileID: 0}
     - target: {fileID: 7116624005743295604, guid: 1c0d489d5dbda1e41b18d7a7782e604a, type: 3}
       propertyPath: m_LocalPosition.y
@@ -547,7 +547,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7116624005743295604, guid: 1c0d489d5dbda1e41b18d7a7782e604a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 71
+      value: 174
       objectReference: {fileID: 0}
     - target: {fileID: 7116624005743295604, guid: 1c0d489d5dbda1e41b18d7a7782e604a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -579,7 +579,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7116624005743541962, guid: 1c0d489d5dbda1e41b18d7a7782e604a, type: 3}
       propertyPath: m_Name
-      value: BlueTerrorBeinger
+      value: BlueTerrorBringer
       objectReference: {fileID: 0}
     - target: {fileID: 7116624005743541962, guid: 1c0d489d5dbda1e41b18d7a7782e604a, type: 3}
       propertyPath: m_IsActive
@@ -777,6 +777,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1873194406}
     m_Modifications:
+    - target: {fileID: 5160957693414888959, guid: 3d5eeecc0d707c949a00e13c5451cd04, type: 3}
+      propertyPath: attackPower
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 5160957693414888959, guid: 3d5eeecc0d707c949a00e13c5451cd04, type: 3}
+      propertyPath: detectionAngle
+      value: 360
+      objectReference: {fileID: 0}
     - target: {fileID: 5160957693415027633, guid: 3d5eeecc0d707c949a00e13c5451cd04, type: 3}
       propertyPath: m_Name
       value: RedUsurper
@@ -2569,7 +2577,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5973781012816531572, guid: d2692ae7a6a94fa4fa50afa5f6947954, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -115.3
+      value: 243
       objectReference: {fileID: 0}
     - target: {fileID: 5973781012816531572, guid: d2692ae7a6a94fa4fa50afa5f6947954, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2577,7 +2585,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5973781012816531572, guid: d2692ae7a6a94fa4fa50afa5f6947954, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -150
+      value: 129
       objectReference: {fileID: 0}
     - target: {fileID: 5973781012816531572, guid: d2692ae7a6a94fa4fa50afa5f6947954, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3676,7 +3684,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7116624005743541962, guid: 1c0d489d5dbda1e41b18d7a7782e604a, type: 3}
       propertyPath: m_Name
-      value: BlueTerrorBeinger
+      value: BlueTerrorBringer
+      objectReference: {fileID: 0}
+    - target: {fileID: 7116624005743674155, guid: 1c0d489d5dbda1e41b18d7a7782e604a, type: 3}
+      propertyPath: attackPower
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7490391161715962939, guid: 1c0d489d5dbda1e41b18d7a7782e604a, type: 3}
       propertyPath: m_AnchorMax.y

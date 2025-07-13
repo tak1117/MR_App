@@ -1,0 +1,95 @@
+body {
+    font-family: sans-serif;
+    text-align: center;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 10px;
+}
+
+#stock-selector {
+    margin: 15px 0;
+    font-size: 1.1em;
+}
+#stock-selector label {
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+#main-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+}
+
+.stock-area {
+    width: 7.5%;
+    height: 85vh;
+    border: 2px solid #b0b0b0;
+    background-color: #e9e9e9;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.stock-area h2 {
+    font-size: 1em;
+    margin-top: 0;
+    color: #333;
+}
+
+.stock-image {
+    width: 90%;
+    margin-bottom: 10px;
+    cursor: grab;
+    user-select: none;
+    border: 1px solid #ccc;
+}
+
+#canvas {
+    position: relative;
+    width: 80%;
+    height: 85vh;
+    border: 2px dashed #ccc;
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.draggable-image {
+    position: absolute;
+    cursor: grab;
+    max-width: 250px;
+    user-select: none;
+    border: 2px solid transparent;
+}
+
+.draggable-image:active, .stock-image:active {
+    cursor: grabbing;
+    border-color: #007bff;
+}
+
+.animated-center-image {
+    position: absolute;
+    /* 1. 要素を親(canvas)の真ん中に配置します */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* 自身の大きさの半分を戻して中央揃え */
+    
+    max-width: 250px; /* 画像の大きさ */
+
+    /* 2. 'bounce'という名前のアニメーションを適用します */
+    animation: bounce 7s infinite ease-in-out;
+}
+
+/* 'bounce'アニメーションの動きを定義します */
+@keyframes bounce {
+    /* アニメーション開始時と終了時 */
+    0%, 100% {
+        transform: translate(-50%, -50%) translateY(-250px);
+    }
+    /* アニメーションの中間地点 (下に60px動く) */
+    50% {
+        transform: translate(-50%, -50%) translateY(250px);
+    }
+}
