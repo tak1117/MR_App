@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
-using UnityEditor.Experimental.GraphView;
+
+// ★ 不要なusingディレクティブを削除
+// using UnityEditor.Experimental.GraphView;
 
 public abstract class DragonBaseController : MonoBehaviour
 {
@@ -34,6 +36,17 @@ public abstract class DragonBaseController : MonoBehaviour
     protected float lastAttackTime;
     protected bool isDead = false;
 
+    // ★---- ここから追加する変数 ----★
+    /// <summary>
+    /// 敵を倒して停止中かどうかのフラグ
+    /// </summary>
+    private bool isVictorious = false;
+    /// <summary>
+    /// 直前のフレームでターゲットだったオブジェクト
+    /// </summary>
+    private Transform lastKnownTarget;
+    // ★---- ここまで追加する変数 ----★
+
     protected virtual void Start()
     {
         animator = GetComponent<Animator>();
@@ -54,15 +67,49 @@ public abstract class DragonBaseController : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (isDead) return;
+        if (!GameManager.isGameStarted)
+        {
+            if (animator != null && animator.speed != 0)
+            {
+                animator.speed = 0;
+            }
+            return;
+        }
+        else
+        {
+            if (animator != null && animator.speed != 1)
+            {
+                animator.speed = 1;
+            }
+        }
 
+        // ★ isDead または isVictorious の間は行動しない
+        if (isDead || isVictorious) return;
+
+        // ★ 直前のターゲットを保存
+        lastKnownTarget = target;
+
+        // 索敵処理
         FindOpponent();
+
+        // ★ ターゲットを見失った（倒した）瞬間の判定
+        if (target == null && lastKnownTarget != null)
+        {
+            // 直前のターゲットが敵ドラゴンで、かつそのドラゴンが死んでいるか確認
+            DragonBaseController enemy = lastKnownTarget.GetComponent<DragonBaseController>();
+            if (enemy != null && enemy.isDead)
+            {
+                // 敵を倒したので、勝ちどきコルーチンを開始
+                StartCoroutine(VictoryPause());
+                return; // このフレームでは他の行動をしない
+            }
+        }
 
         if (target != null)
         {
-            float distanceToTarget = Vector3.Distance(transform.position, target.position); // ★名称変更
+            float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
-            if (distanceToTarget <= attackDistance) // ★名称変更
+            if (distanceToTarget <= attackDistance)
             {
                 attackTarget = target;
                 HandleAttacking();
@@ -76,10 +123,10 @@ public abstract class DragonBaseController : MonoBehaviour
         }
         else
         {
-            if(destination != null)
+            if (destination != null)
             {
                 float distanceToDestination = Vector3.Distance(transform.position, destination.position);
-                if(distanceToDestination <= attackDistance)
+                if (distanceToDestination <= attackDistance)
                 {
                     attackTarget = destination;
                     HandleAttacking();
@@ -104,6 +151,33 @@ public abstract class DragonBaseController : MonoBehaviour
         }
     }
 
+    // ★---- ここから追加するコルーチン ----★
+    /// <summary>
+    /// 敵を倒した後に5秒間停止する処理
+    /// </summary>
+    private IEnumerator VictoryPause()
+    {
+        Debug.Log(gameObject.name + "が勝ちどきをあげている！");
+
+        // 行動停止フラグを立てる
+        isVictorious = true;
+
+        // 移動と攻撃のアニメーションを止める
+        animator.SetBool("IsMoving", false);
+        animator.SetBool("Attack", false);
+
+        // ★ここに「勝ちどき」専用のアニメーションがあれば再生する
+        // animator.SetTrigger("Victory");
+
+        // 5秒間待機
+        yield return new WaitForSeconds(5.0f);
+
+        Debug.Log(gameObject.name + "が行動を再開します。");
+
+        // 行動停止フラグを解除
+        isVictorious = false;
+    }
+
     protected virtual void FindOpponent()
     {
         float startAngle = -detectionAngle / 2f;
@@ -124,12 +198,12 @@ public abstract class DragonBaseController : MonoBehaviour
                 switch (this.tag)
                 {
                     case "Red Dragon":
-                        if(hit.collider.CompareTag("Blue Dragon")) target = hit.transform;
+                        if (hit.collider.CompareTag("Blue Dragon")) target = hit.transform;
                         break;
                     case "Blue Dragon":
                         if (hit.collider.CompareTag("Red Dragon")) target = hit.transform;
                         break;
-                        
+
                 }
             }
             else
@@ -237,6 +311,7 @@ public abstract class DragonBaseController : MonoBehaviour
         if (hitbox != null)
         {
             hitbox.attackPower = this.attackPower;
+            hitbox.attackerTag = this.tag;
         }
         Destroy(hitboxObject, 0.5f);
         yield return null;

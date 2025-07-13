@@ -69,27 +69,4 @@ body {
     border-color: #007bff;
 }
 
-.animated-center-image {
-    position: absolute;
-    /* 1. 要素を親(canvas)の真ん中に配置します */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* 自身の大きさの半分を戻して中央揃え */
-    
-    max-width: 250px; /* 画像の大きさ */
 
-    /* 2. 'bounce'という名前のアニメーションを適用します */
-    animation: bounce 7s infinite ease-in-out;
-}
-
-/* 'bounce'アニメーションの動きを定義します */
-@keyframes bounce {
-    /* アニメーション開始時と終了時 */
-    0%, 100% {
-        transform: translate(-50%, -50%) translateY(-250px);
-    }
-    /* アニメーションの中間地点 (下に60px動く) */
-    50% {
-        transform: translate(-50%, -50%) translateY(250px);
-    }
-}

@@ -9,6 +9,7 @@ TagManager:
   - Red Dragon
   - Blue Tower
   - Red Tower
+  - Box
   layers:
   - Default
   - TransparentFX

@@ -1,18 +1,33 @@
 using UnityEngine;
-using TMPro; // TextMeshProを使用する場合
+using TMPro;
 using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
-    // インスペクターからUIテキストをアタッチする
     public TextMeshProUGUI countdownText;
 
-    // 各タワーがスポーンしたかを管理するフラグ
+    public static GameManager instance;
+
+    // ★追加：ゲームが開始したかを管理する、どこからでもアクセスできる旗印
+    public static bool isGameStarted = false;
+
     private bool isRedTowerVisible = false;
     private bool isBlueTowerVisible = false;
-
-    // カウントダウンが既に開始されたかを管理するフラグ
     private bool isCountdownStarted = false;
+
+    void Awake()
+    {
+        // もしinstanceがまだ設定されていなければ、自分自身を代入する
+        if (instance == null)
+        {
+            instance = this;
+        }
+        // もし既にinstanceが存在していたら、重複しないようにこのオブジェクトを破壊する
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     // 赤タワーが認識されたときに呼ばれるメソッド
     public void OnRedTowerFound()
@@ -27,10 +42,10 @@ public class GameManager : MonoBehaviour
     {
         isRedTowerVisible = false;
         Debug.Log("Red Tower Lost!");
-        // カウントダウン中にマーカーが見失われたら中断する
         StopAllCoroutines();
         countdownText.gameObject.SetActive(false);
-        isCountdownStarted = false; // リセット
+        isCountdownStarted = false;
+        isGameStarted = false; // ★追加：ゲーム状態をリセット
     }
 
     // 青タワーが認識されたときに呼ばれるメソッド
@@ -46,26 +61,24 @@ public class GameManager : MonoBehaviour
     {
         isBlueTowerVisible = false;
         Debug.Log("Blue Tower Lost!");
-        // カウントダウン中にマーカーが見失われたら中断する
         StopAllCoroutines();
         countdownText.gameObject.SetActive(false);
-        isCountdownStarted = false; // リセット
+        isCountdownStarted = false;
+        isGameStarted = false; // ★追加：ゲーム状態をリセット
     }
 
-    // 両方のタワーが表示されているかチェックする
     private void CheckTowersAndStartCountdown()
     {
-        // 両方のタワーが表示されていて、まだカウントダウンが始まっていなければ開始
         if (isRedTowerVisible && isBlueTowerVisible && !isCountdownStarted)
         {
             StartCoroutine(StartCountdown());
         }
     }
 
-    // カウントダウンを実行するコルーチン
     private IEnumerator StartCountdown()
     {
         isCountdownStarted = true;
+        isGameStarted = false; // ★追加：カウントダウン中はゲーム未開始
         countdownText.gameObject.SetActive(true);
 
         countdownText.text = "3";
@@ -78,11 +91,31 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         countdownText.text = "Game Start!";
-        yield return new WaitForSeconds(1.5f); // 1.5秒表示
+        isGameStarted = true; // ★追加：ゲーム開始の旗を立てる！
 
+        yield return new WaitForSeconds(1.5f);
         countdownText.gameObject.SetActive(false);
 
-        // --- ここにゲーム開始後の処理を記述 ---
         Debug.Log("ゲーム開始！");
+    }
+    // ★★★ このメソッドをGameManager.csに追加 ★★★
+    public void HandleGameOver(string destroyedTowerTag)
+    {
+        // ゲームを停止させる
+        isGameStarted = false;
+
+        // countdownTextを再利用して勝敗メッセージを表示する
+        countdownText.gameObject.SetActive(true);
+
+        if (destroyedTowerTag == "Red Tower")
+        {
+            countdownText.text = "Player Blue Win!!";
+            countdownText.color = Color.blue; // 青文字
+        }
+        else if (destroyedTowerTag == "Blue Tower")
+        {
+            countdownText.text = "Player Red Win!!";
+            countdownText.color = Color.red; // 赤文字
+        }
     }
 }

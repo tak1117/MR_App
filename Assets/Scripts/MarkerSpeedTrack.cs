@@ -74,9 +74,6 @@ public class MarkerSpeedTrack : MonoBehaviour
             // Calculate speed (speed = distance / time)
             speed = distance / sampleTimer;
 
-            // Output speed to console
-            Debug.Log($"Marker speed: {speed.ToString("F2")} m/s");
-
             // Reset position and timer for next calculation
             previousPosition = transform.position;
             sampleTimer = 0f;

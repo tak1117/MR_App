@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // ドラッグ＆ドロップなど、基本的な機能は先に設定
     const imageUploader = document.getElementById('imageUploader');
     const canvas = document.getElementById('canvas');
     const leftStock = document.getElementById('left-stock');
@@ -10,7 +9,35 @@ document.addEventListener('DOMContentLoaded', () => {
     let offsetY = 0;
     let isDraggingFromStock = false;
 
-    // 1. 画像アップロード機能
+    /**
+     * ★★ 1. 初期画像をストックに読み込む関数 ★★
+     * ページを開いたときに、指定した画像を左右のストックに配置します。
+     * 画像のパスはここで指定してください。
+     */
+    function loadInitialImages() {
+        // 表示したい画像の情報を設定
+        const initialImages = [
+            { src: 'images/Blue_Souleater.png', targetArea: leftStock },
+            { src: 'images/Blue_Bringer.png', targetArea: leftStock },
+            { src: 'images/Blue_tower.png', targetArea: leftStock },
+            { src: 'images/Red_Usurper.png', targetArea: rightStock },
+            { src: 'images/Red_tower.png', targetArea: rightStock },
+        ];
+
+        initialImages.forEach(data => {
+            const img = document.createElement('img');
+            img.src = data.src;
+            img.className = 'stock-image';
+            // 画像が見つからない場合のエラー処理
+            img.onerror = () => console.error(`画像の読み込みに失敗しました: ${data.src}`);
+            
+            addDragEventsToStockImage(img); // 画像にイベントを設定
+            data.targetArea.appendChild(img); // ストックエリアに画像を追加
+        });
+    }
+
+
+    // ファイルアップロード機能（必要なければこのセクションごと削除してもOKです）
     imageUploader.addEventListener('change', (event) => {
         const files = event.target.files;
         if (!files.length) return;
@@ -31,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 2. ストックエリアの画像にイベントを設定
+    // ストックエリアの画像にイベントを設定する関数
     function addDragEventsToStockImage(img) {
         img.addEventListener('mousedown', (e) => {
             e.preventDefault();
@@ -47,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. キャンバス内の画像にイベントを設定
+    // キャンバス内の画像にイベントを設定する関数
     function addDragEventsToCanvasImage(img) {
         img.addEventListener('mousedown', (e) => {
             e.preventDefault();
@@ -63,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4. マウス移動時の処理
+    // マウス移動時の処理
     document.addEventListener('mousemove', (e) => {
         if (!draggedItem) return;
         e.preventDefault();
@@ -74,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
             preview.style.position = 'absolute';
             preview.style.pointerEvents = 'none';
             preview.style.opacity = '0.7';
-            preview.style.maxWidth = '300px';
+            preview.style.maxWidth = '250px';
             document.body.appendChild(preview);
         }
 
@@ -92,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 5. マウスボタンを離した時の処理
+    // マウスボタンを離した時の処理
     document.addEventListener('mouseup', (e) => {
         if (!draggedItem) return;
 
@@ -106,7 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
                              e.clientY >= canvasRect.top && e.clientY <= canvasRect.bottom;
 
         if (isDraggingFromStock && isOverCanvas) {
-            const newImg = draggedItem.cloneNode();
+            // 新しい画像を作成してキャンバスに追加
+            const newImg = draggedItem.cloneNode(true); // クローンを作成
             newImg.className = 'draggable-image';
             newImg.style.width = '';
             newImg.style.height = '';
@@ -115,22 +143,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
             addDragEventsToCanvasImage(newImg);
             canvas.appendChild(newImg);
+
+            // ★★ 2. ストックにあった元の画像を削除 ★★
+            draggedItem.remove();
+
         }
 
-        draggedItem.style.cursor = 'grab';
+        if (draggedItem) { // draggedItemが削除されていない場合（移動しなかった場合）
+            draggedItem.style.cursor = 'grab';
+        }
+        
         draggedItem = null;
         isDraggingFromStock = false;
     });
-});
 
-window.addEventListener('load', () => {
-    const canvas = document.getElementById('canvas');
-    const movingImage = document.createElement('img');
-
-    movingImage.src = 'images/box.png';
-    
-    // ★アニメーション用のCSSクラスを割り当てるだけに変更
-    movingImage.className = 'animated-center-image';
-    
-    canvas.appendChild(movingImage);
+    // ページ読み込み完了時に初期画像を配置する
+    loadInitialImages();
 });

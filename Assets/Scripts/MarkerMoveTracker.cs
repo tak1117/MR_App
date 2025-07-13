@@ -73,8 +73,6 @@ public class MarkerMoveTracker : MonoBehaviour
             }
         }
 
-        // Output total distance to console
-        Debug.Log($"Total distance moved: {totalDistanceMoved.ToString("F2")} m");
 
         // Update previous position for the next frame
         previousPosition = transform.position;
