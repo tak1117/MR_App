@@ -21,7 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { src: 'images/Blue_Bringer.png', targetArea: leftStock },
             { src: 'images/Blue_tower.png', targetArea: leftStock },
             { src: 'images/Red_Usurper.png', targetArea: rightStock },
-            { src: 'images/Red_tower.png', targetArea: rightStock },
+            { src: 'images/Yellow_nightmare.png', targetArea: rightStock },
+            { src: 'images/Red_tower.png', targetArea: rightStock }
         ];
 
         initialImages.forEach(data => {
